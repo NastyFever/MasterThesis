@@ -9,6 +9,7 @@ public class Constants
 	{
 		//TODO: Your URL parameter names here...
 		public static final String SAMPLE_ID = "sampleId";
+		public static final String numberOfTries = "numberOfTries";
 	}
 
 	/**
@@ -20,5 +21,6 @@ public class Constants
 		//TODO: Your Route names here...
 		public static final String SINGLE_SAMPLE = "sample.single.route";
 		public static final String SAMPLE_COLLECTION = "sample.collection.route";
+		public static final String REQUEST = "regulator.request";
 	}
 }
