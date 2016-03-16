@@ -44,11 +44,16 @@ public class SampleController
         int numberOfRetries = Integer.parseInt(decoder.parameters().get(Constants.Url.numberOfTries).get(0));
         System.out.println("" + numberOfRetries);
 
+        boolean accessService = handleRequest(numberOfRetries);
 
 		response.setResponseNoContent();
 	}
 
-	public void delete(Request request, Response response)
+    private boolean handleRequest(int numberOfRetries) {
+        return true;
+    }
+
+    public void delete(Request request, Response response)
 	{
 		//TODO: Your 'DELETE' logic here...
         System.out.println("HTTP DELETE");
