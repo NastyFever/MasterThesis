@@ -43,6 +43,12 @@ public class SampleController
         return Collections.emptyList();
 	}
 
+    public void init(Request request, Response response) {
+        System.out.println("Innit recieved from central. Restarting the regulator.");
+        regulator = new Regulator(SOME_LWM, SOME_HWM, SOME_AM);
+        response.setResponseNoContent();
+    }
+
 	public void update(Request request, Response response)
 	{
 		//TODO: Your 'PUT' logic here...
@@ -61,6 +67,7 @@ public class SampleController
         System.out.println("Update recieved from application server");
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
+        System.out.println("Update recieved from application server " + numberOfAcceptedJobs);
         regulator.recievedUpdateFromApplicationServer(numberOfAcceptedJobs);
         response.setResponseNoContent();
     }
