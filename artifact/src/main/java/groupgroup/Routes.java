@@ -13,11 +13,15 @@ public abstract class Routes
 			.method(HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE)
 			.name(Constants.Routes.SINGLE_SAMPLE);
 
-		server.uri("/regulator/request?{numberOfTries}.{format}", config.getSampleController())
+		server.uri("/regulator/request?{"+Constants.Url.numberOfTries+"}.{format}", config.getSampleController())
             .method(HttpMethod.PUT)
             .name(Constants.Routes.REQUEST);
 
-		server.uri("/your/route/here.{format}", config.getSampleController())
+        server.uri("/regulator/update?{" + Constants.Url.numberOfAcceptedJobs + "}.{format}", config.getSampleController())
+            .action("updateRegulator", HttpMethod.PUT)
+            .name(Constants.Routes.UPDATE);
+
+        server.uri("/your/route/here.{format}", config.getSampleController())
 			.action("readAll", HttpMethod.GET)
 			.method(HttpMethod.POST)
 			.name(Constants.Routes.SAMPLE_COLLECTION);

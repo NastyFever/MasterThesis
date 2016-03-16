@@ -31,7 +31,7 @@ public class SampleController
 	public Object read(Request request, Response response)
 	{
 		//TODO: Your 'GET' logic here...
-        System.out.println("bajs read");
+        System.out.println("GET");
 
         return null;
 	}
@@ -39,7 +39,7 @@ public class SampleController
 	public List<Object> readAll(Request request, Response response)
 	{
 		//TODO: Your 'GET collection' logic here...
-        System.out.println("bajs");
+        System.out.println("GET Collection");
         return Collections.emptyList();
 	}
 
@@ -47,6 +47,7 @@ public class SampleController
 	{
 		//TODO: Your 'PUT' logic here...
         System.out.println("HTTP PUT");
+
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         int numberOfRetries = Integer.parseInt(decoder.parameters().get(Constants.Url.numberOfTries).get(0));
         System.out.println("" + numberOfRetries);
@@ -56,6 +57,13 @@ public class SampleController
 		response.setResponseNoContent();
 	}
 
+    public void updateRegulator(Request request, Response response){
+        System.out.println("Update recieved from application server");
+        QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
+        long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
+        regulator.recievedUpdateFromApplicationServer(numberOfAcceptedJobs);
+        response.setResponseNoContent();
+    }
 
     public void delete(Request request, Response response)
 	{
