@@ -3,15 +3,22 @@ package groupgroup;
 import java.util.Collections;
 import java.util.List;
 
+import groupgroup.Regulator.Regulator;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.restexpress.Request;
 import org.restexpress.Response;
 
 public class SampleController
 {
-	public SampleController()
+    private Regulator regulator;
+    private int SOME_LWM = 100;
+    private int SOME_HWM = 400;
+    private int SOME_AM = 250;
+
+    public SampleController()
 	{
-		super();
+        super();
+        regulator = new Regulator(SOME_LWM, SOME_HWM, SOME_AM);
 	}
 
 	public Object create(Request request, Response response)
@@ -44,14 +51,11 @@ public class SampleController
         int numberOfRetries = Integer.parseInt(decoder.parameters().get(Constants.Url.numberOfTries).get(0));
         System.out.println("" + numberOfRetries);
 
-        boolean accessService = handleRequest(numberOfRetries);
+        boolean accessService = regulator.handleRequest(numberOfRetries);
 
 		response.setResponseNoContent();
 	}
 
-    private boolean handleRequest(int numberOfRetries) {
-        return true;
-    }
 
     public void delete(Request request, Response response)
 	{
