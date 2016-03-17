@@ -54,6 +54,8 @@ public class SampleController
         System.out.println("" + numberOfRetries);
 
         boolean accessService = regulator.handleRequest(numberOfRetries);
+
+        // dummy code for testing communication
         String typeOfMessage = "AccessService";
         int accessToken = 0;
         int returnTime = 0;
@@ -65,6 +67,7 @@ public class SampleController
         } else if (typeOfMessage == "ScheduleMessage"){
             jc.put("ReturnTime", returnTime);
         }
+        // end dummy code
 
         response.setBody(jc);
 	}
