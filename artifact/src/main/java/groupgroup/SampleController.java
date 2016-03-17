@@ -7,6 +7,7 @@ import groupgroup.Regulator.Regulator;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.restexpress.Request;
 import org.restexpress.Response;
+import org.json.simple.*;
 
 public class SampleController
 {
@@ -53,8 +54,19 @@ public class SampleController
         System.out.println("" + numberOfRetries);
 
         boolean accessService = regulator.handleRequest(numberOfRetries);
+        String typeOfMessage = "AccessService";
+        int accessToken = 0;
+        int returnTime = 0;
 
-		response.setResponseNoContent();
+        JSONObject jc = new JSONObject();
+        jc.put("Type", typeOfMessage);
+        if(typeOfMessage.equals("AccessService")){
+            jc.put("Token", accessToken);
+        } else if (typeOfMessage == "ScheduleMessage"){
+            jc.put("ReturnTime", returnTime);
+        }
+
+        response.setBody(jc);
 	}
 
     public void updateRegulator(Request request, Response response){
