@@ -59,21 +59,7 @@ public class SampleController
         int numberOfRetries = Integer.parseInt(decoder.parameters().get(Constants.Url.numberOfTries).get(0));
         System.out.println("" + numberOfRetries);
 
-        boolean accessService = regulator.handleRequest(numberOfRetries);
-
-        // dummy code for testing communication
-        String typeOfMessage = "AccessService";
-        int accessToken = 0;
-        int returnTime = 0;
-
-        JSONObject jc = new JSONObject();
-        jc.put("Type", typeOfMessage);
-        if(typeOfMessage.equals("AccessService")){
-            jc.put("Token", accessToken);
-        } else if (typeOfMessage == "ScheduleMessage"){
-            jc.put("ReturnTime", returnTime);
-        }
-        // end dummy code
+        JSONObject jc = regulator.handleRequest(numberOfRetries);
 
         response.setBody(jc);
 	}

@@ -1,5 +1,7 @@
 package groupgroup.Regulator;
 
+import org.json.simple.JSONObject;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Regulator {
@@ -21,11 +23,19 @@ public class Regulator {
         this.currentLevelOfQueue = 0;
     }
 
-    public synchronized boolean handleRequest(int numberOfRetries) {
+    public synchronized JSONObject handleRequest(int numberOfRetries) {
+        long accessToken = ++numberOfReleasedTokens;
+        long returnTime = 0;
+
+        JSONObject jc = new JSONObject();
         if(currentLevelOfQueue < AM) {
-            return true;
+            jc.put("Type", "AccessService");
+            jc.put("Token", accessToken);
+        } else {
+            jc.put("Type", "ScheduleMessage");
+            jc.put("ReturnTime", returnTime);
         }
-        return false;
+        return jc;
     }
 
     public synchronized void recievedUpdateFromApplicationServer(long numberOfUsedTokens) {
