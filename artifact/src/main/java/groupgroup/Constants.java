@@ -24,5 +24,6 @@ public class Constants
 		public static final String SAMPLE_COLLECTION = "sample.collection.route";
 		public static final String REQUEST = "regulator.request";
 		public static final String UPDATE = "regulator.update";
+		public static final String INIT = "regulator.init";
 	}
 }
