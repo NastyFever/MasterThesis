@@ -64,11 +64,22 @@ public class SampleController
         response.setBody(jc);
 	}
 
+    public void getReleasedTokens(Request request, Response response){
+        response.setBody(regulator.getNumberOfReleasedTokens());
+    }
+
+    public void setReleasedTokens(Request request, Response response){
+        QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
+        long numberOfReleasedTokens = Long.parseLong(decoder.parameters().get(Constants.Url.releasedTokens).get(0));
+        regulator.setNumberOfReleasedTokens(numberOfReleasedTokens);
+        response.setBody(regulator.getNumberOfReleasedTokens());
+    }
+
+
     public void updateRegulator(Request request, Response response){
-        System.out.println("Update recieved from application server");
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
-        System.out.println("Update recieved from application server " + numberOfAcceptedJobs);
+        System.out.println("Update recieved from application server. Number of accpeted jobs " + numberOfAcceptedJobs);
         regulator.recievedUpdateFromApplicationServer(numberOfAcceptedJobs);
         response.setResponseNoContent();
     }

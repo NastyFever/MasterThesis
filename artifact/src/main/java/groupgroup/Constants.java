@@ -11,6 +11,7 @@ public class Constants
 		public static final String SAMPLE_ID = "sampleId";
 		public static final String numberOfTries = "numberOfTries";
 		public static final String numberOfAcceptedJobs = "numberOfAcceptedJobs";
+		public static final String releasedTokens = "releasedTokens";
 	}
 
 	/**
