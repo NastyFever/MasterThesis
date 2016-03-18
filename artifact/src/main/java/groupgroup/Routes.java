@@ -32,20 +32,14 @@ public abstract class Routes
 
 
         // Debugging
-        server.uri("/regulator/releasedTokens.{format}", config.getSampleController())
+        server.uri("/regulator/releasedTokens.{format}", config.getRegulatorDebugController())
                 .action("getReleasedTokens", HttpMethod.GET);
 
-        server.uri("/regulator/releasedTokens?{" + Constants.Url.releasedTokens + "}.{format}", config.getSampleController())
+        server.uri("/regulator/releasedTokens?{" + Constants.Url.releasedTokens + "}.{format}", config.getRegulatorDebugController())
                 .action("setReleasedTokens", HttpMethod.PUT);
 
-        server.uri("/regulator/finishedJobs.{format}", config.getSampleController())
+        server.uri("/regulator/finishedJobs.{format}", config.getRegulatorDebugController())
                 .action("getFinishedJobs", HttpMethod.GET);
-
-
-
-
-
-
 // or...
 //		server.regex("/some.regex", config.getRouteController());
     }

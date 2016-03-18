@@ -64,22 +64,6 @@ public class SampleController
         response.setBody(jc);
 	}
 
-    public void getReleasedTokens(Request request, Response response){
-        response.setBody(regulator.getNumberOfReleasedTokens());
-    }
-
-    public void setReleasedTokens(Request request, Response response){
-        QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
-        long numberOfReleasedTokens = Long.parseLong(decoder.parameters().get(Constants.Url.releasedTokens).get(0));
-        regulator.setNumberOfReleasedTokens(numberOfReleasedTokens);
-        response.setBody(regulator.getNumberOfReleasedTokens());
-    }
-
-    public void getFinishedJobs(Request request, Response response) {
-        response.setBody(regulator.getNumberOfFinishedJobs());
-    }
-
-
     public void updateRegulator(Request request, Response response){
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
@@ -94,4 +78,8 @@ public class SampleController
         System.out.println("HTTP DELETE");
         response.setResponseNoContent();
 	}
+
+    public Regulator getRegulator() {
+        return regulator;
+    }
 }
