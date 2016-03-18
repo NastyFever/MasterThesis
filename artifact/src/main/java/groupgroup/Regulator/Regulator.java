@@ -20,7 +20,7 @@ public class Regulator {
         this.AM = AM;
         this.currentLevelOfQueue = 0;
         this.lastTimeForUpdate = System.currentTimeMillis();
-        this.taskCompletionRate = -1;
+        this.taskCompletionRate = 1/10000;
     }
 
     public synchronized JSONObject handleRequest(int numberOfRetries) {
@@ -31,11 +31,15 @@ public class Regulator {
             jc.put("Token", accessToken);
         } else {
             jc.put("Type", "ScheduleMessage");
-            double returnTime = System.currentTimeMillis() + 1/taskCompletionRate;
-            jc.put("ReturnTime", returnTime);
+            double returnTime = (1/taskCompletionRate);
+            jc.put("ReturnTime", debug[spinner]);
+            spinner = ++spinner % 3;
         }
         return jc;
     }
+
+    int spinner = 0;
+    double[] debug = {1000, 5000, 9000};
 
     long lastTimeForUpdate;
     double taskCompletionRate;
@@ -48,6 +52,6 @@ public class Regulator {
             System.out.println("TCR is updated to: " + taskCompletionRate);
         }
         this.numberOfUsedTokens = numberOfUsedTokens;
-        currentLevelOfQueue = numberOfReleasedTokens - this.numberOfUsedTokens;
+        currentLevelOfQueue = numberOfReleasedTokens - this.numberOfUsedTokens; // This should never be negative
     }
 }
