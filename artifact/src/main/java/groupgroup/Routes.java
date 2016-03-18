@@ -29,6 +29,17 @@ public abstract class Routes
 			.action("readAll", HttpMethod.GET)
 			.method(HttpMethod.POST)
 			.name(Constants.Routes.SAMPLE_COLLECTION);
+
+
+        // Debugging
+        server.uri("/regulator/releasedTokens.{format}", config.getRegulatorDebugController())
+                .action("getReleasedTokens", HttpMethod.GET);
+
+        server.uri("/regulator/releasedTokens?{" + Constants.Url.releasedTokens + "}.{format}", config.getRegulatorDebugController())
+                .action("setReleasedTokens", HttpMethod.PUT);
+
+        server.uri("/regulator/finishedJobs.{format}", config.getRegulatorDebugController())
+                .action("getFinishedJobs", HttpMethod.GET);
 // or...
 //		server.regex("/some.regex", config.getRouteController());
     }

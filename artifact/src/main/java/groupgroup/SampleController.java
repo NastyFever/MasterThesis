@@ -65,10 +65,9 @@ public class SampleController
 	}
 
     public void updateRegulator(Request request, Response response){
-        System.out.println("Update recieved from application server");
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
-        System.out.println("Update recieved from application server " + numberOfAcceptedJobs);
+        System.out.println("Update recieved from application server. Number of accpeted jobs " + numberOfAcceptedJobs);
         regulator.recievedUpdateFromApplicationServer(numberOfAcceptedJobs);
         response.setResponseNoContent();
     }
@@ -79,4 +78,8 @@ public class SampleController
         System.out.println("HTTP DELETE");
         response.setResponseNoContent();
 	}
+
+    public Regulator getRegulator() {
+        return regulator;
+    }
 }

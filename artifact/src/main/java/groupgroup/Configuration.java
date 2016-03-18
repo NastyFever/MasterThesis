@@ -19,6 +19,7 @@ extends Environment
 	private int executorThreadPoolSize;
 
 	private SampleController sampleController;
+    private RegulatorDebugController regulatorDebugController;
 
 	@Override
 	protected void fillValues(Properties p)
@@ -32,6 +33,7 @@ extends Environment
 	private void initialize()
 	{
 		sampleController = new SampleController();
+        regulatorDebugController = new RegulatorDebugController(sampleController);
 	}
 
 	public int getPort()
@@ -53,4 +55,8 @@ extends Environment
 	{
 		return sampleController;
 	}
+
+    public RegulatorDebugController getRegulatorDebugController() {
+        return regulatorDebugController;
+    }
 }

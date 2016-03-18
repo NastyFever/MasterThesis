@@ -74,6 +74,19 @@ public class Regulator {
             System.out.println("TCR is updated to: " + taskCompletionRate);
         }
         this.numberOfUsedTokens = numberOfUsedTokens;
-        currentLevelOfQueue = numberOfReleasedTokens - this.numberOfUsedTokens; // This should never be negative
+        currentLevelOfQueue = numberOfReleasedTokens - this.numberOfUsedTokens; // TODO: Assert this
+    }
+
+    public long getNumberOfReleasedTokens() {
+        return numberOfReleasedTokens;
+    }
+
+    public void setNumberOfReleasedTokens(long numberOfReleasedTokens) {
+        this.numberOfReleasedTokens = numberOfReleasedTokens;
+        System.out.println("set numberOfReleasedTokens: " + numberOfReleasedTokens); // TODO: Change to logger
+    }
+
+    public Long getNumberOfFinishedJobs() {
+        return numberOfUsedTokens;
     }
 }
