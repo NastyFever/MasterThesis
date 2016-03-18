@@ -63,4 +63,8 @@ public class Regulator {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
         System.out.println("set numberOfReleasedTokens: " + numberOfReleasedTokens); // TODO: Change to logger
     }
+
+    public Long getNumberOfFinishedJobs() {
+        return numberOfUsedTokens;
+    }
 }

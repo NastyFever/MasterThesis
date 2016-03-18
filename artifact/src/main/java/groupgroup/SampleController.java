@@ -75,6 +75,10 @@ public class SampleController
         response.setBody(regulator.getNumberOfReleasedTokens());
     }
 
+    public void getFinishedJobs(Request request, Response response) {
+        response.setBody(regulator.getNumberOfFinishedJobs());
+    }
+
 
     public void updateRegulator(Request request, Response response){
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());

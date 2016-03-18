@@ -38,7 +38,8 @@ public abstract class Routes
         server.uri("/regulator/releasedTokens?{" + Constants.Url.releasedTokens + "}.{format}", config.getSampleController())
                 .action("setReleasedTokens", HttpMethod.PUT);
 
-
+        server.uri("/regulator/finishedJobs.{format}", config.getSampleController())
+                .action("getFinishedJobs", HttpMethod.GET);
 
 
 
