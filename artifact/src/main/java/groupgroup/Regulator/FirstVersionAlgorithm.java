@@ -19,14 +19,16 @@ public class FirstVersionAlgorithm implements Algorithm {
         estimatedTaskCompletionRatePerMillis = 1/8000;
     }
     @Override
-    public double getReturntime() {
+    public synchronized double getReturntime() {
         long currentTime = System.currentTimeMillis();
         if(currentTime < virtualQueueEndTime) {
-            return 1/ estimatedTaskCompletionRatePerMillis;
+            double waitDuration = 1/ estimatedTaskCompletionRatePerMillis;
+            virtualQueueEndTime = currentTime + (long) waitDuration;
+            return waitDuration;
         } else {
-            double returnTime = virtualQueueEndTime - currentTime;
-            returnTime =+ 1/ estimatedTaskCompletionRatePerMillis;
-            return returnTime;
+            virtualQueueEndTime += 1/ estimatedTaskCompletionRatePerMillis;
+            double waitDuration = virtualQueueEndTime - currentTime;
+            return waitDuration;
         }
     }
 
