@@ -18,8 +18,6 @@ public class Regulator {
 
     public Regulator(int LWM, int HWM, int AM) {
         this.numberOfFinishedJobs = 0L;
-        this.lastTimeForUpdate = System.currentTimeMillis();
-        this.taskCompletionRate = 1/10000;
         this.algorithm = new FirstVersionAlgorithm(LWM, HWM, AM);
         init();
     }
@@ -39,9 +37,6 @@ public class Regulator {
         JSONObject jc = algorithm.runAlgorithm(numberOfFinishedJobs, numberOfRetries);
         return jc;
     }
-
-    long lastTimeForUpdate;
-    double taskCompletionRate;
 
     public synchronized void recievedUpdateFromApplicationServer(long numberOfFinishedJobs) {
         this.numberOfFinishedJobs = numberOfFinishedJobs;

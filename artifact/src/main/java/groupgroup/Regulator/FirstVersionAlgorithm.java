@@ -3,10 +3,10 @@ package groupgroup.Regulator;
 import org.json.simple.JSONObject;
 
 public class FirstVersionAlgorithm implements Algorithm {
-    // The current level of the TCP backlog queue is the deff between numberOfReleasedTokens and numberOfFinishedJobs
+    // The current level of the TCP backlog queue is the diff between numberOfReleasedTokens and numberOfFinishedJobs
     private long numberOfReleasedTokens = 0L;
     private double estimatedTaskCompletionRatePerMillis;
-    private long virtualQueueEndTime = 0;
+    private double virtualQueueEndTime = 0;
 
     int LWM;
     int HWM;
@@ -16,14 +16,14 @@ public class FirstVersionAlgorithm implements Algorithm {
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
-        estimatedTaskCompletionRatePerMillis = 1/8000;
+        estimatedTaskCompletionRatePerMillis = 1.0/250;
     }
     @Override
     public synchronized double getReturntime() {
-        long currentTime = System.currentTimeMillis();
-        if(currentTime < virtualQueueEndTime) {
-            double waitDuration = 1/ estimatedTaskCompletionRatePerMillis;
-            virtualQueueEndTime = currentTime + (long) waitDuration;
+        double currentTime = System.currentTimeMillis();
+        if(currentTime > virtualQueueEndTime) {
+            double waitDuration = 1/estimatedTaskCompletionRatePerMillis;
+            virtualQueueEndTime = currentTime + waitDuration;
             return waitDuration;
         } else {
             virtualQueueEndTime += 1/ estimatedTaskCompletionRatePerMillis;
