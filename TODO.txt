@@ -1,6 +1,17 @@
 Development TODOs:
-- Extend logger for the regulator
+- Extend logger for the regulator	
+	* Queue levels
+	* Updates from central - with time (non-regular?)
+	* Internal events? Every time a client connects, along with the number of retries
 - Analyze and solve asynchronous update of server values on regulator
 - Investigate why, and when we get Connection timed out: no further information
-- Add support for chossing algorithm when starting regulator
+- Add support for choosing algorithm when starting regulator
 - Remove comments like "PUT http://192.168.5.68:8081/regulator/update?numberOfAcceptedJobs=1373 responded with 204 No Content in 0ms" Redundant and steals IO
+- Fix log file
+- Is our log API efficient enough?
+
+Other TODOs:
+- Theory behind TCP
+	* How long should our backlong be?
+	* How long can clients survive in queue? How can we affect this?
+- TCP termination? Does this affect anything on the server?
