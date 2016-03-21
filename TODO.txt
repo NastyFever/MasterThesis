@@ -2,3 +2,4 @@ Development TODOs:
 - Extend logger for the regulator
 - Analyze and solve asynchronous update of server values on regulator
 - Investigate why, and when we get Connection timed out: no further information
+- Add support for chossing algorithm when starting regulator
