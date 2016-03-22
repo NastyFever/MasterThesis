@@ -12,14 +12,12 @@ import org.json.simple.*;
 public class SampleController
 {
     private Regulator regulator;
-    private int SOME_LWM = 100;
-    private int SOME_HWM = 400;
-    private int SOME_AM = 250;
 
-    public SampleController()
+    public SampleController(Configuration configuration)
 	{
         super();
-        regulator = new Regulator(SOME_LWM, SOME_HWM, SOME_AM);
+        regulator = new Regulator(configuration.getLowWaterMark(), configuration.getHighWaterMark(),
+                configuration.getAimedMark());
 	}
 
 	public Object create(Request request, Response response)
@@ -43,7 +41,7 @@ public class SampleController
 
     public void init(Request request, Response response) {
         System.out.println("Innit recieved from central. Restarting the regulator.");
-        regulator = new Regulator(SOME_LWM, SOME_HWM, SOME_AM);
+        regulator.setNumberOfReleasedTokens(0);
         response.setResponseNoContent();
     }
 
@@ -51,13 +49,16 @@ public class SampleController
 	{
 		//TODO: Your 'PUT' logic here...
 
+	}
+
+    public void requestAccess(Request request, Response response) {
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         int numberOfRetries = Integer.parseInt(decoder.parameters().get(Constants.Url.numberOfTries).get(0));
 
         JSONObject jc = regulator.handleRequest(numberOfRetries);
 
         response.setBody(jc);
-	}
+    }
 
     public void updateRegulator(Request request, Response response){
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
