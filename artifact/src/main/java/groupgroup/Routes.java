@@ -13,8 +13,8 @@ public abstract class Routes
 			.method(HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE)
 			.name(Constants.Routes.SINGLE_SAMPLE);
 
-		server.uri("/regulator/request?{"+Constants.Url.numberOfTries+"}.{format}", config.getSampleController())
-            .method(HttpMethod.PUT)
+		server.uri("/regulator/request?{" + Constants.Url.numberOfTries + "}.{format}", config.getSampleController())
+            .action("requestAccess", HttpMethod.PUT)
             .name(Constants.Routes.REQUEST);
 
         server.uri("/regulator/init.{format}", config.getSampleController())
