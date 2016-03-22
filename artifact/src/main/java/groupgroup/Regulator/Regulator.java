@@ -20,12 +20,13 @@ public class Regulator {
     }
 
     public JSONObject handleRequest(int numberOfRetries) {
-        JSONObject jc = algorithm.runAlgorithm(numberOfFinishedJobs, numberOfRetries);
+        JSONObject jc = algorithm.runAlgorithm(numberOfFinishedJobs, numberOfRetries, LOGGER);
         return jc;
     }
 
-    public synchronized void recievedUpdateFromApplicationServer(long numberOfFinishedJobs) {
+    public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs) {
         this.numberOfFinishedJobs = numberOfFinishedJobs;
+        LOGGER.info("Number of active tokens is: " +  (algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs));
     }
 
     public long getNumberOfReleasedTokens() {

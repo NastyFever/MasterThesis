@@ -1,6 +1,7 @@
 package groupgroup.Regulator;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
 
 public interface Algorithm {
 
@@ -16,8 +17,9 @@ public interface Algorithm {
      * @return
      * @param numberOfFinishedJobs
      * @param numberOfRetries
+     * @param logger
      */
-    JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries);
+    JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries, Logger logger);
 
     long getNumberOfReleasedTokens();
 

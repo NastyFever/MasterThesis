@@ -40,7 +40,7 @@ public class SampleController
 	}
 
     public void init(Request request, Response response) {
-        System.out.println("Innit recieved from central. Restarting the regulator.");
+        System.out.println("Init received from central. Restarting the regulator.");
         regulator.setNumberOfReleasedTokens(0);
         response.setResponseNoContent();
     }
@@ -63,7 +63,7 @@ public class SampleController
     public void updateRegulator(Request request, Response response){
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
-        regulator.recievedUpdateFromApplicationServer(numberOfAcceptedJobs);
+        regulator.receivedUpdateFromApplicationServer(numberOfAcceptedJobs);
         response.setResponseNoContent();
     }
 

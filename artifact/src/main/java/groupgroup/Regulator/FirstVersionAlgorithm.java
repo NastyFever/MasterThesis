@@ -1,6 +1,7 @@
 package groupgroup.Regulator;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
 
 public class FirstVersionAlgorithm implements Algorithm {
     // The current level of the TCP backlog queue is the diff between numberOfReleasedTokens and numberOfFinishedJobs
@@ -33,13 +34,14 @@ public class FirstVersionAlgorithm implements Algorithm {
     }
 
     @Override
-    public synchronized JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries) {
+    public synchronized JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
         JSONObject jc = new JSONObject();
 
         if(isQueueLevelLessThanAimedMark(numberOfFinishedJobs) || isQueueLevelOverThirdQuarterAndHasRetried(numberOfFinishedJobs, numberOfRetries)) {
             jc.put("Type", "AccessService");
             long accessToken = ++numberOfReleasedTokens;
             jc.put("Token", accessToken);
+            logger.info("Client was given access after " + numberOfRetries + " tries");
         } else {
             jc.put("Type", "ScheduleMessage");
             jc.put("ReturnTime", getReturntime());
