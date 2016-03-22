@@ -20,8 +20,8 @@ public class Server
 		this.server = new RestExpress()
 				.setName(SERVICE_NAME)
 				.setBaseUrl(config.getBaseUrl())
-				.setExecutorThreadCount(config.getExecutorThreadPoolSize())
-				.addMessageObserver(new SimpleConsoleLogMessageObserver());
+				.setExecutorThreadCount(config.getExecutorThreadPoolSize());
+//				.addMessageObserver(new SimpleConsoleLogMessageObserver());
 
 		Routes.define(config, server);
 	}

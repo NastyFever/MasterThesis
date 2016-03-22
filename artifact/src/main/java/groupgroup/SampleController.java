@@ -51,13 +51,16 @@ public class SampleController
 	{
 		//TODO: Your 'PUT' logic here...
 
+	}
+
+    public void requestAccess(Request request, Response response) {
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         int numberOfRetries = Integer.parseInt(decoder.parameters().get(Constants.Url.numberOfTries).get(0));
 
         JSONObject jc = regulator.handleRequest(numberOfRetries);
 
         response.setBody(jc);
-	}
+    }
 
     public void updateRegulator(Request request, Response response){
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
