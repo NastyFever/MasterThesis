@@ -40,6 +40,9 @@ public abstract class Routes
 
         server.uri("/regulator/finishedJobs.{format}", config.getRegulatorDebugController())
                 .action("getFinishedJobs", HttpMethod.GET);
+
+        server.uri("/regulator/setNumberOfReleasedTokensToNumberOfFinishedJobs.{format}", config.getRegulatorDebugController())
+                .action("setNumberOfReleasedTokensToNumberOfFinishedJobs", HttpMethod.PUT);
 // or...
 //		server.regex("/some.regex", config.getRouteController());
     }
