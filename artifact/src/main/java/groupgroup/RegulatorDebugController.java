@@ -1,5 +1,6 @@
 package groupgroup;
 
+import groupgroup.Regulator.Regulator;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.restexpress.Request;
 import org.restexpress.Response;
@@ -25,6 +26,13 @@ public class RegulatorDebugController {
 
     public void getFinishedJobs(Request request, Response response) {
         response.setBody(sampleController.getRegulator().getNumberOfFinishedJobs());
+    }
+
+    public void setNumberOfReleasedTokensToNumberOfFinishedJobs(Request request, Response response) {
+        Regulator regulator = sampleController.getRegulator();
+        Long numberOfFinishedJobs = regulator.getNumberOfFinishedJobs();
+        regulator.setNumberOfReleasedTokens(numberOfFinishedJobs);
+        response.setBody(numberOfFinishedJobs);
     }
 
 }
