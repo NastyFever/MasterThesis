@@ -67,8 +67,11 @@ public class FirstVersionAlgorithm implements Algorithm {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
     }
 
+    private final double OVERRATE = 1.1;
+
     @Override
-    public void updateEstimatedTaskCompletionRate(double clientFinishInterval) {
-        estimatedTaskCompletionRatePerMillis = clientFinishInterval / 1000;
+    public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger) {
+        estimatedTaskCompletionRatePerMillis = OVERRATE * (clientFinishInterval / 1000);
+        logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis);
     }
 }

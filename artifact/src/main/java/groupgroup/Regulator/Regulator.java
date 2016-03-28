@@ -34,11 +34,11 @@ public class Regulator {
 
         if(UPDATE_TASK_COMPLETION_RATE_THRESHOLD * C_C < numberOfActiveClients) {
             if(fullyUtilized) {
-                long numberOfFinishedJobsDuringPeriod = epokStartNumberOfFinishedJobs - numberOfFinishedJobs;
+                long numberOfFinishedJobsDuringPeriod = numberOfFinishedJobs - epokStartNumberOfFinishedJobs;
                 if(numberOfFinishedJobsDuringPeriod > 0) {
                     long fullyUtilizedPeriod = System.currentTimeMillis() - epokStartTime;
                     double clientFinishIntervall = 0.0 + fullyUtilizedPeriod / numberOfFinishedJobsDuringPeriod;
-                    algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall);
+                    algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER);
                 }
             } else {
                 fullyUtilized = true;
