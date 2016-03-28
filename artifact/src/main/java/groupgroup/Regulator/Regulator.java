@@ -26,25 +26,27 @@ public class Regulator {
 
     final double UPDATE_TASK_COMPLETION_RATE_THRESHOLD = 0.9; // Example, percent of c_c that need to be filled.
     final double C_C = 300; // Should be given as input.
-    double averageTimePerClientMS = 125;
-    boolean lastValue = false;
-    long lastValueForFinishedJobs;
-    final double THOUSAND_MS = 1000;
+    boolean fullyUtilized = false;
+    long epokStartTime,
+        epokStartNumberOfFinishedJobs;
 
     private void onlineUpdateOfTaskCompletionRate(long numberOfFinishedJobs, long numberOfActiveClients) {
 
         if(UPDATE_TASK_COMPLETION_RATE_THRESHOLD * C_C < numberOfActiveClients) {
-            if(lastValue) {
-                long diff = lastValueForFinishedJobs - numberOfFinishedJobs;
-                lastValueForFinishedJobs = numberOfFinishedJobs;
-                averageTimePerClientMS = (averageTimePerClientMS + THOUSAND_MS/diff) /2; // Heavy weighted
-                algorithm.updateEstimatedTaskCompletionRate(averageTimePerClientMS);
+            if(fullyUtilized) {
+                long numberOfFinishedJobsDuringPeriod = epokStartNumberOfFinishedJobs - numberOfFinishedJobs;
+                if(numberOfFinishedJobsDuringPeriod > 0) {
+                    long fullyUtilizedPeriod = System.currentTimeMillis() - epokStartTime;
+                    double clientFinishIntervall = 0.0 + fullyUtilizedPeriod / numberOfFinishedJobsDuringPeriod;
+                    algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall);
+                }
             } else {
-                lastValue = true;
-                lastValueForFinishedJobs = numberOfFinishedJobs;
+                fullyUtilized = true;
+                epokStartTime = System.currentTimeMillis();
+                epokStartNumberOfFinishedJobs = numberOfFinishedJobs;
             }
         } else {
-            lastValue = false;
+            fullyUtilized = false;
         }
     }
 

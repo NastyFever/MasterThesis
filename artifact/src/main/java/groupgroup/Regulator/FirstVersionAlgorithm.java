@@ -68,7 +68,7 @@ public class FirstVersionAlgorithm implements Algorithm {
     }
 
     @Override
-    public void updateEstimatedTaskCompletionRate(double averageTimePerClientMS) {
-        estimatedTaskCompletionRatePerMillis = averageTimePerClientMS / 1000;
+    public void updateEstimatedTaskCompletionRate(double clientFinishInterval) {
+        estimatedTaskCompletionRatePerMillis = clientFinishInterval / 1000;
     }
 }

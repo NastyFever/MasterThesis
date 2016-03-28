@@ -25,5 +25,5 @@ public interface Algorithm {
 
     void setNumberOfReleasedTokens(long numberOfReleasedTokens);
 
-    void updateEstimatedTaskCompletionRate(double averageTimePerClientMS);
+    void updateEstimatedTaskCompletionRate(double clientFinishInterval);
 }
