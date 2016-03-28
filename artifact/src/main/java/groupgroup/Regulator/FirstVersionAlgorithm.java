@@ -17,7 +17,7 @@ public class FirstVersionAlgorithm implements Algorithm {
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
-        estimatedTaskCompletionRatePerMillis = 1.0/250;
+        estimatedTaskCompletionRatePerMillis = 8.0/1000;
     }
     @Override
     public synchronized double getReturntime() {
@@ -67,7 +67,7 @@ public class FirstVersionAlgorithm implements Algorithm {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
     }
 
-    private final double OVERRATE = 1.1;
+    private final double OVERRATE = 1.0;
 
     @Override
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger) {
