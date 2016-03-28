@@ -66,4 +66,9 @@ public class FirstVersionAlgorithm implements Algorithm {
     public void setNumberOfReleasedTokens(long numberOfReleasedTokens) {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
     }
+
+    @Override
+    public void updateEstimatedTaskCompletionRate(double averageTimePerClientMS) {
+        estimatedTaskCompletionRatePerMillis = averageTimePerClientMS / 1000;
+    }
 }
