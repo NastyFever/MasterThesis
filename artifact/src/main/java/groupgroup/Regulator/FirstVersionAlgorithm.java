@@ -71,7 +71,7 @@ public class FirstVersionAlgorithm implements Algorithm {
 
     @Override
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger) {
-        estimatedTaskCompletionRatePerMillis = OVERRATE * (clientFinishInterval / 1000);
+        estimatedTaskCompletionRatePerMillis = OVERRATE * (1 / clientFinishInterval / 1000);
         logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis);
     }
 }
