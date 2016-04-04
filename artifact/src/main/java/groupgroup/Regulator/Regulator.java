@@ -25,7 +25,7 @@ public class Regulator {
     }
 
     final double UPDATE_TASK_COMPLETION_RATE_THRESHOLD = 0.9; // Example, percent of c_c that need to be filled.
-    final double C_C = 300; // Should be given as input.
+    final double C_C = 100; // Should be given as input.
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
@@ -35,7 +35,7 @@ public class Regulator {
         if(UPDATE_TASK_COMPLETION_RATE_THRESHOLD * C_C < numberOfActiveClients) {
             if(fullyUtilized) {
                 long numberOfFinishedJobsDuringPeriod = numberOfFinishedJobs - epokStartNumberOfFinishedJobs;
-                if(numberOfFinishedJobsDuringPeriod > 0) {
+                if(numberOfFinishedJobsDuringPeriod > 2*C_C) {
                     long fullyUtilizedPeriod = System.currentTimeMillis() - epokStartTime;
                     double clientFinishIntervall = 0.0 + fullyUtilizedPeriod / numberOfFinishedJobsDuringPeriod;
                     algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER);
