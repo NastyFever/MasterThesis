@@ -16,6 +16,7 @@ extends Environment
 	private static final String BACKLOG_QUEUE_HIGH_WATER_MARK = "regulator.hwm";
 	private static final String BACKLOG_QUEUE_LOW_WATER_MARK = "regulator.lwm";
 	private static final String BACKLOG_QUEUE_AIMED_MARK = "regulator.am";
+	private static final String REGULATOR_ALGORITHM = "regulator.algorithm";
 
 	private int port;
 	private String baseUrl;
@@ -23,6 +24,7 @@ extends Environment
     private int highWaterMark;
     private int lowWaterMark;
     private int aimedMark;
+	private String algorithm;
 
 	private SampleController sampleController;
     private RegulatorDebugController regulatorDebugController;
@@ -34,6 +36,7 @@ extends Environment
 		this.baseUrl = p.getProperty(BASE_URL_PROPERTY, "http://localhost:" + String.valueOf(port));
 		this.executorThreadPoolSize = Integer.parseInt(p.getProperty(EXECUTOR_THREAD_POOL_SIZE, DEFAULT_EXECUTOR_THREAD_POOL_SIZE));
         setUpWaterMarks(p);
+        setRegulatorType(p);
 		initialize();
 	}
 
@@ -41,6 +44,10 @@ extends Environment
         this.highWaterMark = Integer.parseInt(p.getProperty(BACKLOG_QUEUE_HIGH_WATER_MARK));
         this.lowWaterMark = Integer.parseInt(p.getProperty(BACKLOG_QUEUE_LOW_WATER_MARK));
         this.aimedMark = Integer.parseInt(p.getProperty(BACKLOG_QUEUE_AIMED_MARK));
+    }
+
+    private void setRegulatorType(Properties p){
+        this.algorithm = p.getProperty(REGULATOR_ALGORITHM);
     }
 
     private void initialize()
@@ -83,5 +90,9 @@ extends Environment
 
     public int getAimedMark() {
         return aimedMark;
+    }
+
+    public String getRegulatorAlgorithm(){
+        return algorithm;
     }
 }

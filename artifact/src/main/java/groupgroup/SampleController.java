@@ -16,7 +16,7 @@ public class SampleController
     public SampleController(Configuration configuration)
 	{
         super();
-        regulator = new Regulator(configuration.getLowWaterMark(), configuration.getHighWaterMark(),
+        regulator = new Regulator(configuration.getRegulatorAlgorithm(), configuration.getLowWaterMark(), configuration.getHighWaterMark(),
                 configuration.getAimedMark());
 	}
 
