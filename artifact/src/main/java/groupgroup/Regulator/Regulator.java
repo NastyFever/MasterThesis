@@ -13,14 +13,14 @@ public class Regulator {
     long numberOfFinishedJobs;
     Algorithm algorithm;
 
-    public Regulator(String regulatorAlgorithm, int LWM, int HWM, int AM) {
+    public Regulator(String regulatorAlgorithm, int LWM, int HWM, int AM, double tcrScalingFactor) {
         this.numberOfFinishedJobs = 0L;
         switch (regulatorAlgorithm){
             case "FirstVersionAlgorithm":
-                this.algorithm = new FirstVersionAlgorithm(LWM, HWM, AM);
+                this.algorithm = new FirstVersionAlgorithm(LWM, HWM, AM, tcrScalingFactor);
                 break;
             case "SecondVersionAlgorithm":
-                this.algorithm = new SecondVersionAlgorithm(LWM, HWM, AM);
+                this.algorithm = new SecondVersionAlgorithm(LWM, HWM, AM, tcrScalingFactor);
                 break;
             default:
                 LOGGER.error("Invalid algorithm type");

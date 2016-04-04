@@ -12,11 +12,13 @@ public class FirstVersionAlgorithm implements Algorithm {
     int LWM;
     int HWM;
     int AM;
+    private final double OVERRATE;
 
-    public FirstVersionAlgorithm(int LWM, int HWM, int AM){
+    public FirstVersionAlgorithm(int LWM, int HWM, int AM, double tcrScalingFactor){
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
+        this.OVERRATE = tcrScalingFactor;
         estimatedTaskCompletionRatePerMillis = 8.0/1000;
     }
     @Override
@@ -66,8 +68,6 @@ public class FirstVersionAlgorithm implements Algorithm {
     public void setNumberOfReleasedTokens(long numberOfReleasedTokens) {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
     }
-
-    private final double OVERRATE = 1.1;
 
     @Override
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger) {
