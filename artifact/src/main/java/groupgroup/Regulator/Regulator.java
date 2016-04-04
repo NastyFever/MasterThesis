@@ -15,7 +15,7 @@ public class Regulator {
 
     public Regulator(int LWM, int HWM, int AM) {
         this.numberOfFinishedJobs = 0L;
-        this.algorithm = new FirstVersionAlgorithm(LWM, HWM, AM);
+        this.algorithm = new SecondVersionAlgorithm(LWM, HWM, AM);
         LOGGER.info("Successfully started regulator.");
     }
 
