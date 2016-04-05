@@ -24,6 +24,7 @@ public class ReadRegulatorLog {
 
     static List<String> listOfQueueLevels = new ArrayList<>();
     static List<String> listOfFinishedJobs = new ArrayList<>();
+    static List<String> listOfTimes = new ArrayList<>();
 
     private static void parseFile() {
         String fileName = "C:\\Programmering\\Exjobb\\log.log";
@@ -33,7 +34,7 @@ public class ReadRegulatorLog {
             );
            ExcelBridge exl = new ExcelBridge();
 
-            exl.writeList(listOfQueueLevels, listOfFinishedJobs);
+            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -51,6 +52,9 @@ public class ReadRegulatorLog {
         } else if(line.contains("Number of active tokens is:")) {
             String word[] = line.split(" ");
             listOfQueueLevels.add(word[word.length-1]);
+            int subtractFromStringToGetInSeconds = 3;
+            String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
+            listOfTimes.add(timeAsString);
         } else if(line.contains("Number of finished jobs is:")) {
             String word[] = line.split(" ");
             listOfFinishedJobs.add(word[word.length-1]);
