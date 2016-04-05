@@ -18,9 +18,11 @@ public class Regulator {
         switch (regulatorAlgorithm){
             case "FirstVersionAlgorithm":
                 this.algorithm = new FirstVersionAlgorithm(LWM, HWM, AM, tcrScalingFactor);
+                LOGGER.info("Using %s", regulatorAlgorithm);
                 break;
             case "SecondVersionAlgorithm":
                 this.algorithm = new SecondVersionAlgorithm(LWM, HWM, AM, tcrScalingFactor);
+                LOGGER.info("Using %s", regulatorAlgorithm);
                 break;
             default:
                 LOGGER.error("Invalid algorithm type");
