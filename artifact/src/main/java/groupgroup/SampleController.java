@@ -63,7 +63,8 @@ public class SampleController
     public void updateRegulator(Request request, Response response){
         QueryStringDecoder decoder = new QueryStringDecoder(request.getUrl());
         long numberOfAcceptedJobs = Long.parseLong(decoder.parameters().get(Constants.Url.numberOfAcceptedJobs).get(0));
-        regulator.receivedUpdateFromApplicationServer(numberOfAcceptedJobs);
+        double jobTime = Double.parseDouble(decoder.parameters().get(Constants.Url.jobTime).get(0));
+        regulator.receivedUpdateFromApplicationServer(numberOfAcceptedJobs, jobTime);
         response.setResponseNoContent();
     }
 

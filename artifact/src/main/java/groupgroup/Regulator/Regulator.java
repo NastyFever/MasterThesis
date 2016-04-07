@@ -44,32 +44,28 @@ public class Regulator {
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
+    double averageJobTime = -1;
 
-    private void onlineUpdateOfTaskCompletionRate(long numberOfFinishedJobs, long numberOfActiveClients) {
+    private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
-        if(UPDATE_TASK_COMPLETION_RATE_THRESHOLD * C_C < numberOfActiveClients) {
-            if(fullyUtilized) {
-                long numberOfFinishedJobsDuringPeriod = numberOfFinishedJobs - epokStartNumberOfFinishedJobs;
-                if(numberOfFinishedJobsDuringPeriod > 2*C_C) {
-                    long fullyUtilizedPeriod = System.currentTimeMillis() - epokStartTime;
-                    double clientFinishIntervall = 0.0 + fullyUtilizedPeriod / numberOfFinishedJobsDuringPeriod;
-                    algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER);
-                }
-            } else {
-                fullyUtilized = true;
-                epokStartTime = System.currentTimeMillis();
-                epokStartNumberOfFinishedJobs = numberOfFinishedJobs;
-            }
+        LOGGER.info("New jobTime: " + jobTime);
+        if (averageJobTime > 0){
+            averageJobTime = ( averageJobTime + jobTime ) / 2;
+            LOGGER.info("Average jobtime is set to " + averageJobTime);
         } else {
-            fullyUtilized = false;
+            averageJobTime = jobTime;
         }
+
+        double clientFinishIntervall = averageJobTime / C_C;
+        LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
+        algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER);
     }
 
-    public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs) {
+    public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs, double jobTime) {
         this.numberOfFinishedJobs = numberOfFinishedJobs;
         long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
         if (tcrLiveUpdate) {
-            onlineUpdateOfTaskCompletionRate(numberOfFinishedJobs, numberOfActiveClients);
+            onlineUpdateOfTaskCompletionRate(jobTime);
         }
         LOGGER.info("Number of active tokens is: " + numberOfActiveClients);
         LOGGER.info("Number of finished jobs is: " +  numberOfFinishedJobs);

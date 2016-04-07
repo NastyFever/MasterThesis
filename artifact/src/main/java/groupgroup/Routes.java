@@ -21,7 +21,7 @@ public abstract class Routes
                 .action("init", HttpMethod.PUT)
                 .name(Constants.Routes.INIT);
 
-        server.uri("/regulator/update?{" + Constants.Url.numberOfAcceptedJobs + "}.{format}", config.getSampleController())
+        server.uri("/regulator/update?{" + Constants.Url.numberOfAcceptedJobs + Constants.Url.jobTime + "}.{format}", config.getSampleController())
             .action("updateRegulator", HttpMethod.PUT)
             .name(Constants.Routes.UPDATE);
 
