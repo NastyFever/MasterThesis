@@ -3,11 +3,14 @@ package groupgroup.Regulator;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicLong;
+
 public class SecondVersionAlgorithm implements Algorithm {
     // The current level of the TCP backlog queue is the diff between numberOfReleasedTokens and numberOfFinishedJobs
     public long numberOfReleasedTokens = 0L;
     public double estimatedTaskCompletionRatePerMillis;
-    private long numberOfClientsInTheVirtualQueue = 0L;
+    private AtomicLong numberOfClientsInTheVirtualQueue = new AtomicLong(0L);
 
     int LWM;
     int HWM;
@@ -22,30 +25,39 @@ public class SecondVersionAlgorithm implements Algorithm {
         estimatedTaskCompletionRatePerMillis = 8.0/1000;
     }
     @Override
-    public synchronized double getReturntime() {
+    public double getReturntime() {
         double waitDuration = 1/estimatedTaskCompletionRatePerMillis;
-        return waitDuration*(1+numberOfClientsInTheVirtualQueue);
+        double returnTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue.getAndIncrement());
+        return returnTime;
     }
 
-    @Override
-    public synchronized JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
-        JSONObject jc = new JSONObject();
+    Semaphore checkThenSet = new Semaphore(1);
 
-        if(isQueueLevelLessThanAimedMark(numberOfFinishedJobs) || isQueueLevelOverThirdQuarterAndHasRetried(numberOfFinishedJobs, numberOfRetries)) {
-            if(numberOfRetries > 0) {
-                --numberOfClientsInTheVirtualQueue;
-            }
-            jc.put("Type", "AccessService");
-            long accessToken = ++numberOfReleasedTokens;
-            jc.put("Token", accessToken);
-            logger.info("Client was given access after " + numberOfRetries + " tries");
-        } else {
-            if(numberOfRetries == 0) {
-                ++numberOfClientsInTheVirtualQueue;
-            }
-            jc.put("Type", "ScheduleMessage");
-            jc.put("ReturnTime", getReturntime());
+    @Override
+    public JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
+        JSONObject jc = new JSONObject();
+        if(numberOfRetries > 0) {
+            numberOfClientsInTheVirtualQueue.decrementAndGet();
         }
+        try {
+            checkThenSet.acquire(); // We have to protect the check.
+            if(isQueueLevelLessThanAimedMark(numberOfFinishedJobs) ||
+                    isQueueLevelOverThirdQuarterAndHasRetried(numberOfFinishedJobs, numberOfRetries)) {
+                long accessToken = ++numberOfReleasedTokens;
+                checkThenSet.release();
+                jc.put("Type", "AccessService");
+                jc.put("Token", accessToken);
+                logger.info("Client was given access after " + numberOfRetries + " tries");
+            } else {
+                checkThenSet.release();
+                jc.put("Type", "ScheduleMessage");
+                jc.put("ReturnTime", getReturntime());
+            }
+        } catch (InterruptedException e) {
+            logger.info("Got interupted when checking if the regulator should release token: " + e.getMessage());
+            checkThenSet.release();
+        }
+
         return jc;
     }
 
