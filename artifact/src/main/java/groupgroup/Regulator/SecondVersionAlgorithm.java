@@ -14,12 +14,12 @@ public class SecondVersionAlgorithm implements Algorithm {
     int AM;
     private final double OVERRATE;
 
-    public SecondVersionAlgorithm(int LWM, int HWM, int AM, double tcrScalingFactor){
+    public SecondVersionAlgorithm(int LWM, int HWM, int AM, double tcrScalingFactor, double initialTCR){
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
         this.OVERRATE = tcrScalingFactor;
-        estimatedTaskCompletionRatePerMillis = 8.0/1000;
+        estimatedTaskCompletionRatePerMillis = initialTCR / 1000;
     }
     @Override
     public synchronized double getReturntime() {
