@@ -18,6 +18,8 @@ extends Environment
 	private static final String BACKLOG_QUEUE_AIMED_MARK = "regulator.am";
 	private static final String REGULATOR_ALGORITHM = "regulator.algorithm";
     private static final String REGULATOR_TCR_SCALING_FACTOR = "regulator.TCRScalingFactor";
+	private static final String REGULATOR_INITIAL_TCR = "regulator.initialTCR";
+	private static final String REGULATOR_TCR_LIVE_UPDATE = "regulator.TCRLiveUpdate";
 
 	private int port;
 	private String baseUrl;
@@ -27,6 +29,8 @@ extends Environment
     private int aimedMark;
 	private String algorithm;
     private double TCRScalingFactor;
+	private double initialTCR;
+	private boolean TCRLiveUpdate;
 
 	private SampleController sampleController;
     private RegulatorDebugController regulatorDebugController;
@@ -47,6 +51,8 @@ extends Environment
         this.aimedMark = Integer.parseInt(p.getProperty(BACKLOG_QUEUE_AIMED_MARK));
         this.algorithm = p.getProperty(REGULATOR_ALGORITHM);
         this.TCRScalingFactor = Double.parseDouble(p.getProperty(REGULATOR_TCR_SCALING_FACTOR));
+		this.initialTCR = Double.parseDouble(p.getProperty(REGULATOR_INITIAL_TCR));
+		this.TCRLiveUpdate = Boolean.parseBoolean(p.getProperty(REGULATOR_TCR_LIVE_UPDATE));
     }
 
     private void initialize()
@@ -95,7 +101,15 @@ extends Environment
         return algorithm;
     }
 
-    public double getTCRScalingFactor(){
+    public double getTCRScalingFactor() {
         return TCRScalingFactor;
     }
+
+	public double getInitialTCR() {
+		return initialTCR;
+	}
+
+	public boolean isTCRLiveUpdate() {
+		return TCRLiveUpdate;
+	}
 }
