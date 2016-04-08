@@ -47,7 +47,7 @@ public class Regulator {
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
-    double averageJobTime = 125;
+    double averageJobTime = 12500;
     double oldJobWeightFactor;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
