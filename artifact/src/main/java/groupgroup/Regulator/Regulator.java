@@ -44,16 +44,15 @@ public class Regulator {
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
-    double averageJobTime = -1;
+    double averageJobTime = 125;
+    double oldJobWeightFactor = 0.75;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
         LOGGER.info("New jobTime: " + jobTime);
         if (averageJobTime > 0){
-            averageJobTime = ( averageJobTime + jobTime ) / 2;
+            averageJobTime = oldJobWeightFactor * averageJobTime + (1 - oldJobWeightFactor) * jobTime;
             LOGGER.info("Average jobtime is set to " + averageJobTime);
-        } else {
-            averageJobTime = jobTime;
         }
 
         double clientFinishIntervall = averageJobTime / C_C;
