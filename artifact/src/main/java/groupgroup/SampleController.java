@@ -16,8 +16,7 @@ public class SampleController
     public SampleController(Configuration configuration)
 	{
         super();
-        regulator = new Regulator(configuration.getRegulatorAlgorithm(), configuration.getLowWaterMark(), configuration.getHighWaterMark(),
-                configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR(), configuration.isTCRLiveUpdate());
+        regulator = new Regulator(configuration);
 	}
 
 	public Object create(Request request, Response response)
