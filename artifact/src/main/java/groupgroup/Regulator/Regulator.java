@@ -49,6 +49,7 @@ public class Regulator {
         epokStartNumberOfFinishedJobs;
     double averageJobTime = 12500;
     double oldJobWeightFactor;
+    int numberOfServerUpdates = 0;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
@@ -66,7 +67,7 @@ public class Regulator {
     public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs, double jobTime) {
         this.numberOfFinishedJobs = numberOfFinishedJobs;
         long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
-        if (tcrLiveUpdate) {
+        if (tcrLiveUpdate && (++this.numberOfServerUpdates > 200)) {
             onlineUpdateOfTaskCompletionRate(jobTime);
         }
         LOGGER.info("Number of active tokens is: " + numberOfActiveClients);
