@@ -8,6 +8,7 @@ public class SecondVersionAlgorithm implements Algorithm {
     public long numberOfReleasedTokens = 0L;
     public double estimatedTaskCompletionRatePerMillis;
     private long numberOfClientsInTheVirtualQueue = 0L;
+    private double virtualQueueEndTime = 0;
 
     int LWM;
     int HWM;
@@ -23,8 +24,35 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
     @Override
     public synchronized double getReturntime() {
-        double waitDuration = 1/estimatedTaskCompletionRatePerMillis;
-        return waitDuration*(1+numberOfClientsInTheVirtualQueue);
+        double currentTime = System.currentTimeMillis();
+        double waitDuration = 1 / estimatedTaskCompletionRatePerMillis;
+        double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue);
+
+        if(!isVirtualQueueEndInFuture(currentTime)) { // Not in future
+            Regulator.LOGGER.info("APPEND at start of virtual queue");
+            virtualQueueEndTime += currentTime + waitDuration;
+            return waitDuration;
+        }
+        else if(isSuggestedRetryTimeWithinBound(waitDuration, suggestedRetryTime, currentTime)) {
+            Regulator.LOGGER.info("INSERT");
+            if(suggestedRetryTime + currentTime > virtualQueueEndTime) {
+                virtualQueueEndTime = suggestedRetryTime;
+            }
+            return suggestedRetryTime;
+        } else {
+            Regulator.LOGGER.info("APPEND at end of virtual queue");
+            virtualQueueEndTime += waitDuration;
+            double retryTime = virtualQueueEndTime - currentTime + waitDuration;
+            return retryTime;
+        }
+    }
+
+    private boolean isSuggestedRetryTimeWithinBound(double waitDuration, double suggestedRetryTime, double currentTime) {
+        return virtualQueueEndTime + waitDuration >= suggestedRetryTime + currentTime;
+    }
+
+    private boolean isVirtualQueueEndInFuture(double currentTime) {
+        return virtualQueueEndTime > currentTime;
     }
 
     @Override

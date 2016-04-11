@@ -10,7 +10,7 @@ import groupgroup.Configuration;
 
 public class Regulator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class.getName());
+    public static final Logger LOGGER = LoggerFactory.getLogger(Main.class.getName());
     private final boolean tcrLiveUpdate;
 
     long numberOfFinishedJobs;
