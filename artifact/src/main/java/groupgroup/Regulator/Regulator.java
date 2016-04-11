@@ -47,17 +47,15 @@ public class Regulator {
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
-    double averageJobTime = 12500;
+    double averageJobTime = 0;
     double oldJobWeightFactor;
     int numberOfServerUpdates = 0;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
         LOGGER.info("New jobTime: " + jobTime);
-        if (averageJobTime > 0){
-            averageJobTime = oldJobWeightFactor * averageJobTime + (1 - oldJobWeightFactor) * jobTime;
-            LOGGER.info("Average jobtime is set to " + averageJobTime);
-        }
+        averageJobTime = ( (numberOfServerUpdates - 1) * averageJobTime + jobTime) / numberOfServerUpdates;
+        LOGGER.info("Average jobtime is set to " + averageJobTime);
 
         double clientFinishIntervall = averageJobTime / C_C;
         LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
@@ -67,7 +65,9 @@ public class Regulator {
     public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs, double jobTime) {
         this.numberOfFinishedJobs = numberOfFinishedJobs;
         long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
-        if (tcrLiveUpdate && (++this.numberOfServerUpdates > 200)) {
+        ++numberOfServerUpdates;
+//        if (tcrLiveUpdate && (++this.numberOfServerUpdates > 200)) {
+        if (tcrLiveUpdate) {
             onlineUpdateOfTaskCompletionRate(jobTime);
         }
         LOGGER.info("Number of active tokens is: " + numberOfActiveClients);
