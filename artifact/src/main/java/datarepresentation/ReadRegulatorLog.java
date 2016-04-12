@@ -30,6 +30,8 @@ public class ReadRegulatorLog {
     static List<String> listOfQueueLevels = new ArrayList<>();
     static List<String> listOfFinishedJobs = new ArrayList<>();
     static List<String> listOfTimes = new ArrayList<>();
+    static List<String> listOfTCRUpdateTimes = new ArrayList<>();
+    static List<String> listOfTCR = new ArrayList<>();
 
     private static void parseFile() {
         String fileName = "C:\\Programmering\\Exjobb\\log.log";
@@ -39,7 +41,7 @@ public class ReadRegulatorLog {
             );
            ExcelBridge exl = new ExcelBridge();
 
-            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs);
+            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs, listOfTCRUpdateTimes, listOfTCR);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -94,7 +96,14 @@ public class ReadRegulatorLog {
             } else {
                 skip = false;
             }
-
+        } else if(line.contains("Updated the estimated task completion rate")) {
+            String word[] = line.split(" ");
+            int subtractFromStringToGetInSeconds = 3;
+            String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
+            if(!listOfTimes.contains(timeAsString)) {
+                listOfTCRUpdateTimes.add(timeAsString);
+                listOfTCR.add(Double.toString(round(Double.parseDouble(word[word.length - 6]), 5)));
+            }
         }
     }
 
