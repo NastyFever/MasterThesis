@@ -72,19 +72,29 @@ public class ReadRegulatorLog {
         return (double) tmp / factor;
     }
 
+    static boolean skip = false;
     private static void processLine(String line) {
         if(line.endsWith("tries")) {
             String word[] = line.split(" ");
             updateNumberRetries(Integer.parseInt(word[word.length-2]));
         } else if(line.contains("Number of active tokens is:")) {
             String word[] = line.split(" ");
-            listOfQueueLevels.add(word[word.length-1]);
             int subtractFromStringToGetInSeconds = 3;
             String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
-            listOfTimes.add(timeAsString);
+            if(!listOfTimes.contains(timeAsString)){
+                listOfTimes.add(timeAsString);
+                listOfQueueLevels.add(word[word.length-1]);
+            } else {
+                skip = true;
+            }
         } else if(line.contains("Number of finished jobs is:")) {
-            String word[] = line.split(" ");
-            listOfFinishedJobs.add(word[word.length-1]);
+            if(!skip) {
+                String word[] = line.split(" ");
+                listOfFinishedJobs.add(word[word.length-1]);
+            } else {
+                skip = false;
+            }
+
         }
     }
 
