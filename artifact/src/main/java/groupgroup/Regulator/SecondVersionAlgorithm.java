@@ -29,18 +29,15 @@ public class SecondVersionAlgorithm implements Algorithm {
         double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue);
 
         if(!isVirtualQueueEndInFuture(currentTime)) { // Not in future
-            Regulator.LOGGER.info("APPEND at start of virtual queue");
             virtualQueueEndTime += currentTime + waitDuration;
             return waitDuration;
         }
         else if(isSuggestedRetryTimeWithinBound(waitDuration, suggestedRetryTime, currentTime)) {
-            Regulator.LOGGER.info("INSERT");
             if(suggestedRetryTime + currentTime > virtualQueueEndTime) {
                 virtualQueueEndTime = suggestedRetryTime;
             }
             return suggestedRetryTime;
         } else {
-            Regulator.LOGGER.info("APPEND at end of virtual queue");
             virtualQueueEndTime += waitDuration;
             double retryTime = virtualQueueEndTime - currentTime + waitDuration;
             return retryTime;
