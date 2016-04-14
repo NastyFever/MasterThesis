@@ -19,6 +19,7 @@ public class Regulator {
     public Regulator(Configuration configuration) {
         this.numberOfFinishedJobs = 0L;
         this.tcrLiveUpdate = configuration.isTCRLiveUpdate();
+        this.C_C = configuration.getCC();
         switch (configuration.getRegulatorAlgorithm()){
             case "FirstVersionAlgorithm":
                 this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
@@ -41,7 +42,7 @@ public class Regulator {
         return jc;
     }
 
-    final double C_C = 100; // Should be given as input.
+    final double C_C;
     double averageJobTime = 0;
     int numberOfServerUpdates = 0;
 

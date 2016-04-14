@@ -20,6 +20,7 @@ extends Environment
     private static final String REGULATOR_TCR_SCALING_FACTOR = "regulator.TCRScalingFactor";
 	private static final String REGULATOR_INITIAL_TCR = "regulator.initialTCR";
 	private static final String REGULATOR_TCR_LIVE_UPDATE = "regulator.TCRLiveUpdate";
+	private static final String REGULATOR_CC = "regulator.CC";
 
 	private int port;
 	private String baseUrl;
@@ -31,6 +32,7 @@ extends Environment
     private double TCRScalingFactor;
 	private double initialTCR;
 	private boolean TCRLiveUpdate;
+    private double CC;
 
 	private SampleController sampleController;
     private RegulatorDebugController regulatorDebugController;
@@ -53,6 +55,7 @@ extends Environment
         this.TCRScalingFactor = Double.parseDouble(p.getProperty(REGULATOR_TCR_SCALING_FACTOR));
 		this.initialTCR = Double.parseDouble(p.getProperty(REGULATOR_INITIAL_TCR));
 		this.TCRLiveUpdate = Boolean.parseBoolean(p.getProperty(REGULATOR_TCR_LIVE_UPDATE));
+        this.CC = Double.parseDouble(p.getProperty(REGULATOR_CC));
     }
 
     private void initialize()
@@ -112,4 +115,8 @@ extends Environment
 	public boolean isTCRLiveUpdate() {
 		return TCRLiveUpdate;
 	}
+
+    public double getCC() {
+        return CC;
+    }
 }
