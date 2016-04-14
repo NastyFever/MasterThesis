@@ -30,8 +30,8 @@ public class ReadRegulatorLog {
     static List<String> listOfQueueLevels = new ArrayList<>();
     static List<String> listOfFinishedJobs = new ArrayList<>();
     static List<String> listOfTimes = new ArrayList<>();
-    static List<String> listOfTCRUpdateTimes = new ArrayList<>();
     static List<String> listOfTCR = new ArrayList<>();
+    static List<String> listOfJobTimes = new ArrayList<>();
 
     private static void parseFile() {
         String fileName = "C:\\Programmering\\Exjobb\\log.log";
@@ -41,7 +41,8 @@ public class ReadRegulatorLog {
             );
            ExcelBridge exl = new ExcelBridge();
 
-            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs, listOfTCRUpdateTimes, listOfTCR);
+            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs,
+                    listOfTCR, listOfJobTimes);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -76,35 +77,48 @@ public class ReadRegulatorLog {
 
     static boolean skip = false;
     private static void processLine(String line) {
-        if(line.endsWith("tries")) {
-            String word[] = line.split(" ");
+        String word[] = line.split(" ");
+        if(isGivenAccessLine(line)) {
             updateNumberRetries(Integer.parseInt(word[word.length-2]));
-        } else if(line.contains("Number of active tokens is:")) {
-            String word[] = line.split(" ");
+        } else if(isNewJobTimeLine(line)) {
             int subtractFromStringToGetInSeconds = 3;
             String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
             if(!listOfTimes.contains(timeAsString)){
+                skip=false;
                 listOfTimes.add(timeAsString);
-                listOfQueueLevels.add(word[word.length-1]);
+                listOfJobTimes.add(word[word.length -1]);
             } else {
                 skip = true;
             }
-        } else if(line.contains("Number of finished jobs is:")) {
-            if(!skip) {
-                String word[] = line.split(" ");
+        } else if(!skip) {
+            if(isActiveTokensLine(line)) {
+                listOfQueueLevels.add(word[word.length-1]);
+            } else if(isNumberOfFinishedJobsLine(line)) {
                 listOfFinishedJobs.add(word[word.length-1]);
-            } else {
-                skip = false;
-            }
-        } else if(line.contains("Updated the estimated task completion rate")) {
-            String word[] = line.split(" ");
-            int subtractFromStringToGetInSeconds = 3;
-            String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
-            if(!listOfTimes.contains(timeAsString)) {
-                listOfTCRUpdateTimes.add(timeAsString);
+            } else if(isEstimatedTaskCompletionRateLine(line)) {
                 listOfTCR.add(Double.toString(round(Double.parseDouble(word[word.length - 6]), 5)));
             }
         }
+    }
+
+    private static boolean isGivenAccessLine(String line) {
+        return line.endsWith("tries");
+    }
+
+    private static boolean isNewJobTimeLine(String line) {
+        return line.contains("New jobTime");
+    }
+
+    private static boolean isEstimatedTaskCompletionRateLine(String line) {
+        return line.contains("Updated the estimated task completion rate");
+    }
+
+    private static boolean isNumberOfFinishedJobsLine(String line) {
+        return line.contains("Number of finished jobs is:");
+    }
+
+    private static boolean isActiveTokensLine(String line) {
+        return line.contains("Number of active tokens is:");
     }
 
     private static void updateNumberRetries(int noTries) {
