@@ -28,7 +28,7 @@ public class SecondVersionAlgorithm implements Algorithm {
         double waitDuration = 1 / estimatedTaskCompletionRatePerMillis;
         double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue);
 
-        if(!isVirtualQueueEndInFuture(currentTime)) { // Not in future
+        if(!isVirtualQueueEndInFuture(currentTime)) {
             virtualQueueEndTime += currentTime + waitDuration;
             return waitDuration;
         }

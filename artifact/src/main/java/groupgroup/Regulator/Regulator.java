@@ -19,7 +19,6 @@ public class Regulator {
     public Regulator(Configuration configuration) {
         this.numberOfFinishedJobs = 0L;
         this.tcrLiveUpdate = configuration.isTCRLiveUpdate();
-        this.oldJobWeightFactor = configuration.getOldJobWeightFactor();
         switch (configuration.getRegulatorAlgorithm()){
             case "FirstVersionAlgorithm":
                 this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
@@ -42,13 +41,8 @@ public class Regulator {
         return jc;
     }
 
-    final double UPDATE_TASK_COMPLETION_RATE_THRESHOLD = 0.9; // Example, percent of c_c that need to be filled.
     final double C_C = 100; // Should be given as input.
-    boolean fullyUtilized = false;
-    long epokStartTime,
-        epokStartNumberOfFinishedJobs;
     double averageJobTime = 0;
-    double oldJobWeightFactor;
     int numberOfServerUpdates = 0;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
@@ -66,7 +60,6 @@ public class Regulator {
         this.numberOfFinishedJobs = numberOfFinishedJobs;
         long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
         ++numberOfServerUpdates;
-//        if (tcrLiveUpdate && (++this.numberOfServerUpdates > 200)) {
         if (tcrLiveUpdate) {
             onlineUpdateOfTaskCompletionRate(jobTime);
         }
