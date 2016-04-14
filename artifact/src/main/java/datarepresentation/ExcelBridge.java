@@ -16,6 +16,8 @@ public class ExcelBridge {
     final static int FIRST_COLUMN = 0;
     final static int SECOND_COLUMN = 1;
     final static int THIRD_COLUMN = 2;
+    final static int FOURTH_COLUMN = 3;
+    final static int FIFTH_COLUMN = 4;
 
     private int numberOfEntries = 0;
     private String FILE_NAME = "output" + System.currentTimeMillis() + ".ods";
@@ -33,7 +35,8 @@ public class ExcelBridge {
         }
     }
 
-    public void writeList(List<String> listOfTimes, List<String> listOfQueueLevels, List<String> listOfFinishedJobs) {
+    public void writeList(List<String> listOfTimes, List<String> listOfQueueLevels, List<String> listOfFinishedJobs,
+                          List<String> listOfTCRUpdateTimes, List<String> listOfTCR) {
         try {
             Workbook copy = Workbook.getWorkbook(new File(FILE_NAME));
             WritableWorkbook workbook = Workbook.createWorkbook(new File(FILE_NAME), copy);
@@ -41,6 +44,8 @@ public class ExcelBridge {
             writeListToColumn(listOfTimes, sheet, FIRST_COLUMN, numberOfEntries);
             writeListToColumn(listOfQueueLevels, sheet, SECOND_COLUMN, numberOfEntries);
             writeListToColumn(listOfFinishedJobs, sheet, THIRD_COLUMN, numberOfEntries);
+            writeListToColumn(listOfTCRUpdateTimes, sheet, FOURTH_COLUMN, numberOfEntries);
+            writeListToColumn(listOfTCR, sheet, FIFTH_COLUMN, numberOfEntries);
             copy.close();
             workbook.write();
             workbook.close();

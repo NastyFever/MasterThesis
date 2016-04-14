@@ -7,9 +7,9 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class SecondVersionAlgorithm implements Algorithm {
-    // The current level of the TCP backlog queue is the diff between numberOfReleasedTokens and numberOfFinishedJobs
     public long numberOfReleasedTokens = 0L;
     public double estimatedTaskCompletionRatePerMillis;
+    private double virtualQueueEndTime = 0;
     private AtomicLong numberOfClientsInTheVirtualQueue = new AtomicLong(0L);
 
     int LWM;
@@ -25,10 +25,33 @@ public class SecondVersionAlgorithm implements Algorithm {
         estimatedTaskCompletionRatePerMillis = initialTCR / 1000;
     }
     @Override
-    public double getReturntime() {
-        double waitDuration = 1/estimatedTaskCompletionRatePerMillis;
-        double returnTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue.getAndIncrement());
-        return returnTime;
+    public synchronized double getReturntime() {
+        double currentTime = System.currentTimeMillis();
+        double waitDuration = 1 / estimatedTaskCompletionRatePerMillis;
+        double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue.get());
+
+        if(!isVirtualQueueEndInFuture(currentTime)) {
+            virtualQueueEndTime += currentTime + waitDuration;
+            return waitDuration;
+        }
+        else if(isSuggestedRetryTimeWithinBound(waitDuration, suggestedRetryTime, currentTime)) {
+            if(suggestedRetryTime + currentTime > virtualQueueEndTime) {
+                virtualQueueEndTime = suggestedRetryTime;
+            }
+            return suggestedRetryTime;
+        } else {
+            virtualQueueEndTime += waitDuration;
+            double retryTime = virtualQueueEndTime - currentTime + waitDuration;
+            return retryTime;
+        }
+    }
+
+    private boolean isSuggestedRetryTimeWithinBound(double waitDuration, double suggestedRetryTime, double currentTime) {
+        return virtualQueueEndTime + waitDuration >= suggestedRetryTime + currentTime;
+    }
+
+    private boolean isVirtualQueueEndInFuture(double currentTime) {
+        return virtualQueueEndTime > currentTime;
     }
 
     Semaphore checkThenSet = new Semaphore(1);
