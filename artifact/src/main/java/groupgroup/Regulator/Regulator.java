@@ -44,7 +44,7 @@ public class Regulator {
     }
 
     final double UPDATE_TASK_COMPLETION_RATE_THRESHOLD = 0.9; // Example, percent of c_c that need to be filled.
-    final double C_C; // Should be given as input.
+    final double C_C;
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
