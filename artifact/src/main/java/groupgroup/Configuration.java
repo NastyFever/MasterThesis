@@ -21,6 +21,7 @@ extends Environment
 	private static final String REGULATOR_INITIAL_TCR = "regulator.initialTCR";
 	private static final String REGULATOR_TCR_LIVE_UPDATE = "regulator.TCRLiveUpdate";
 	private static final String REGULATOR_OLD_JOB_WEIGHT_FACTOR = "regulator.oldJobWeightFactor";
+	private static final String REGULATOR_CC = "regulator.CC";
 
 	private int port;
 	private String baseUrl;
@@ -33,6 +34,7 @@ extends Environment
 	private double initialTCR;
 	private boolean TCRLiveUpdate;
 	private double oldJobWeightFactor;
+    private int CC;
 
 	private SampleController sampleController;
     private RegulatorDebugController regulatorDebugController;
@@ -56,6 +58,7 @@ extends Environment
 		this.initialTCR = Double.parseDouble(p.getProperty(REGULATOR_INITIAL_TCR));
 		this.TCRLiveUpdate = Boolean.parseBoolean(p.getProperty(REGULATOR_TCR_LIVE_UPDATE));
 		this.oldJobWeightFactor = Double.parseDouble(p.getProperty(REGULATOR_OLD_JOB_WEIGHT_FACTOR));
+        this.CC = Integer.parseInt(p.getProperty(REGULATOR_CC));
     }
 
     private void initialize()
@@ -119,4 +122,8 @@ extends Environment
 	public double getOldJobWeightFactor() {
 		return oldJobWeightFactor;
 	}
+
+    public int getCC() {
+        return CC;
+    }
 }

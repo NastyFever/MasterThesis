@@ -20,6 +20,7 @@ public class Regulator {
         this.numberOfFinishedJobs = 0L;
         this.tcrLiveUpdate = configuration.isTCRLiveUpdate();
         this.oldJobWeightFactor = configuration.getOldJobWeightFactor();
+        this.C_C = configuration.getCC();
         switch (configuration.getRegulatorAlgorithm()){
             case "FirstVersionAlgorithm":
                 this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
@@ -43,7 +44,7 @@ public class Regulator {
     }
 
     final double UPDATE_TASK_COMPLETION_RATE_THRESHOLD = 0.9; // Example, percent of c_c that need to be filled.
-    final double C_C = 100; // Should be given as input.
+    final double C_C; // Should be given as input.
     boolean fullyUtilized = false;
     long epokStartTime,
         epokStartNumberOfFinishedJobs;
