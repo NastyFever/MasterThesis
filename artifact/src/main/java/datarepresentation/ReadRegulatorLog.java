@@ -79,22 +79,22 @@ public class ReadRegulatorLog {
     private static void processLine(String line) {
         String word[] = line.split(" ");
         if(isGivenAccessLine(line)) {
-            updateNumberRetries(Integer.parseInt(word[word.length-2]));
+            updateNumberRetries(Integer.parseInt(word[word.length - 2]));
         } else if(isNewJobTimeLine(line)) {
             int subtractFromStringToGetInSeconds = 3;
             String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
             if(!listOfTimes.contains(timeAsString)){
                 skip=false;
                 listOfTimes.add(timeAsString);
-                listOfJobTimes.add(word[word.length -1]);
+                listOfJobTimes.add(word[word.length - 1]);
             } else {
                 skip = true;
             }
         } else if(!skip) {
             if(isActiveTokensLine(line)) {
-                listOfQueueLevels.add(word[word.length-1]);
+                listOfQueueLevels.add(word[word.length - 1]);
             } else if(isNumberOfFinishedJobsLine(line)) {
-                listOfFinishedJobs.add(word[word.length-1]);
+                listOfFinishedJobs.add(word[word.length - 1]);
             } else if(isEstimatedTaskCompletionRateLine(line)) {
                 listOfTCR.add(Double.toString(round(Double.parseDouble(word[word.length - 6]), 5)));
             }
