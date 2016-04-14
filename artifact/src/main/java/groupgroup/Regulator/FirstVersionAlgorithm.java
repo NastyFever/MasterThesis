@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 
 public class FirstVersionAlgorithm implements Algorithm {
-    // The current level of the TCP backlog queue is the diff between numberOfReleasedTokens and numberOfFinishedJobs
     private long numberOfReleasedTokens = 0L;
     private double estimatedTaskCompletionRatePerMillis;
     private double virtualQueueEndTime = 0;

@@ -114,17 +114,17 @@ public class ReadRegulatorLog {
             oneTime.incrementAndGet();
         } else if(noTries == 2) {
             twoTimes.incrementAndGet();
-        }else if(noTries == 3) {
+        } else if(noTries == 3) {
             threeTimes.incrementAndGet();
-        }else if(noTries == 4) {
+        } else if(noTries == 4) {
             fourTimes.incrementAndGet();
-        }else if(noTries == 5) {
+        } else if(noTries == 5) {
             fiveTimes.incrementAndGet();
-        }else if(noTries == 6) {
+        } else if(noTries == 6) {
             sixTimes.incrementAndGet();
-        }else if(noTries == 7) {
+        } else if(noTries == 7) {
             sevenTimes.incrementAndGet();
-        }else if(noTries == 8) {
+        } else if(noTries == 8) {
             eightTimes.incrementAndGet();
         } else if(noTries > 8 ) {
             nineTimesOrMore.incrementAndGet();

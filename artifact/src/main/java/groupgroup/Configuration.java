@@ -20,7 +20,6 @@ extends Environment
     private static final String REGULATOR_TCR_SCALING_FACTOR = "regulator.TCRScalingFactor";
 	private static final String REGULATOR_INITIAL_TCR = "regulator.initialTCR";
 	private static final String REGULATOR_TCR_LIVE_UPDATE = "regulator.TCRLiveUpdate";
-	private static final String REGULATOR_OLD_JOB_WEIGHT_FACTOR = "regulator.oldJobWeightFactor";
 	private static final String REGULATOR_CC = "regulator.CC";
 
 	private int port;
@@ -33,7 +32,6 @@ extends Environment
     private double TCRScalingFactor;
 	private double initialTCR;
 	private boolean TCRLiveUpdate;
-	private double oldJobWeightFactor;
     private double CC;
 
 	private SampleController sampleController;
@@ -57,7 +55,6 @@ extends Environment
         this.TCRScalingFactor = Double.parseDouble(p.getProperty(REGULATOR_TCR_SCALING_FACTOR));
 		this.initialTCR = Double.parseDouble(p.getProperty(REGULATOR_INITIAL_TCR));
 		this.TCRLiveUpdate = Boolean.parseBoolean(p.getProperty(REGULATOR_TCR_LIVE_UPDATE));
-		this.oldJobWeightFactor = Double.parseDouble(p.getProperty(REGULATOR_OLD_JOB_WEIGHT_FACTOR));
         this.CC = Double.parseDouble(p.getProperty(REGULATOR_CC));
     }
 
@@ -117,10 +114,6 @@ extends Environment
 
 	public boolean isTCRLiveUpdate() {
 		return TCRLiveUpdate;
-	}
-
-	public double getOldJobWeightFactor() {
-		return oldJobWeightFactor;
 	}
 
     public double getCC() {
