@@ -67,14 +67,15 @@ public class Regulator {
             oldAverageJobTime = averageJobTime;
         }
 
-        double overrate = standardDeviation * (1 + (1-certaintyMeasure));
-
         LOGGER.info("New jobTime: " + jobTime);
         LOGGER.info("Average jobtime is set to " + averageJobTime);
 
-        double clientFinishIntervall = averageJobTime / C_C;
-        LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
-        algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER, overrate);
+        if ( numberOfServerUpdates > 1) {
+            double overrate = standardDeviation * (1 + (1-certaintyMeasure));
+            double clientFinishIntervall = averageJobTime / C_C;
+            LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
+            algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER, overrate);
+        }
     }
 
     public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs, double jobTime) {
