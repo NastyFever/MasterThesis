@@ -58,6 +58,7 @@ public class Regulator {
         averageJobTime = sumOfJobTimes / numberOfServerUpdates;
         variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
         standardDeviation = Math.sqrt(variance);
+        LOGGER.info("Standard deviation: " + standardDeviation);
 
         double certaintyMeasure = 0.0;
         if(oldAverageJobTime < 0) {
@@ -66,6 +67,7 @@ public class Regulator {
             certaintyMeasure = Math.min(oldAverageJobTime, averageJobTime) / Math.max(oldAverageJobTime, averageJobTime);
             oldAverageJobTime = averageJobTime;
         }
+        LOGGER.info("CertaintyMeasure: " + certaintyMeasure);
 
         LOGGER.info("New jobTime: " + jobTime);
         LOGGER.info("Average jobtime is set to " + averageJobTime);
@@ -74,6 +76,7 @@ public class Regulator {
             double overrate = ( 1 + standardDeviation / averageJobTime ) * (1 + (1-certaintyMeasure));
             double clientFinishIntervall = averageJobTime / C_C;
             LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
+            LOGGER.info("eTCR : " + 1 / clientFinishIntervall);
             algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER, overrate);
         }
     }
