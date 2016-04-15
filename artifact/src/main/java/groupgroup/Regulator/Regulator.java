@@ -45,11 +45,20 @@ public class Regulator {
     final double C_C;
     double averageJobTime = 0;
     int numberOfServerUpdates = 0;
+    double variance;
+    double standardDeviation;
+    double sumOfJobTimes = 0;
+    double sumOfSquaredJobTimes = 0;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
+        sumOfJobTimes += jobTime;
+        sumOfSquaredJobTimes += jobTime*jobTime;
+        averageJobTime = sumOfJobTimes / numberOfServerUpdates;
+        variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
+        standardDeviation = Math.sqrt(variance);
+
         LOGGER.info("New jobTime: " + jobTime);
-        averageJobTime = ( (numberOfServerUpdates - 1) * averageJobTime + jobTime) / numberOfServerUpdates;
         LOGGER.info("Average jobtime is set to " + averageJobTime);
 
         double clientFinishIntervall = averageJobTime / C_C;
