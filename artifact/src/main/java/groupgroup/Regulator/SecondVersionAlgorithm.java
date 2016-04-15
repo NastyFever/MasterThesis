@@ -102,19 +102,9 @@ public class SecondVersionAlgorithm implements Algorithm {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
     }
 
-
-    private double standardDeviation = 2.0; // Placeholder, real computation exits in johan unpushed commit.
-    private double oldClientFinishInterval = -1;
     @Override
-    public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger) {
-        double certainytyMeasure = 0.0;
-        if(oldClientFinishInterval < 0) {
-            oldClientFinishInterval = clientFinishInterval;
-        } else {
-            certainytyMeasure = Math.min(oldClientFinishInterval, clientFinishInterval) / Math.max(oldClientFinishInterval, clientFinishInterval);
-            oldClientFinishInterval = clientFinishInterval;
-        }
-        estimatedTaskCompletionRatePerMillis = clientFinishInterval * (standardDeviation * (1 + (1-certainytyMeasure)));
+    public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger, double overrate) {
+        estimatedTaskCompletionRatePerMillis = clientFinishInterval * overrate;
         logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + OVERRATE);
     }
 }
