@@ -102,9 +102,10 @@ public class SecondVersionAlgorithm implements Algorithm {
         this.numberOfReleasedTokens = numberOfReleasedTokens;
     }
 
+
     @Override
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger, double overrate) {
         estimatedTaskCompletionRatePerMillis = clientFinishInterval * overrate;
-        logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + OVERRATE);
+        logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + overrate);
     }
 }
