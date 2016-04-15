@@ -71,7 +71,7 @@ public class Regulator {
         LOGGER.info("Average jobtime is set to " + averageJobTime);
 
         if ( numberOfServerUpdates > 1) {
-            double overrate = ( standardDeviation / averageJobTime ) * (1 + (1-certaintyMeasure));
+            double overrate = ( 1 + standardDeviation / averageJobTime ) * (1 + (1-certaintyMeasure));
             double clientFinishIntervall = averageJobTime / C_C;
             LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
             algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER, overrate);

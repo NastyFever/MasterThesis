@@ -105,7 +105,7 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     @Override
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger, double overrate) {
-        estimatedTaskCompletionRatePerMillis = clientFinishInterval * overrate;
+        estimatedTaskCompletionRatePerMillis = ( 1 / clientFinishInterval) * overrate;
         logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + overrate);
     }
 }
