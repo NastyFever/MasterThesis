@@ -28,7 +28,7 @@ public class SecondVersionAlgorithm implements Algorithm {
     public synchronized double getReturntime() {
         double currentTime = System.currentTimeMillis();
         double waitDuration = 1 / estimatedTaskCompletionRatePerMillis;
-        double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue.get());
+        double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue.getAndIncrement());
 
         if(!isVirtualQueueEndInFuture(currentTime)) {
             virtualQueueEndTime += currentTime + waitDuration;
