@@ -11,13 +11,11 @@ public class FirstVersionAlgorithm implements Algorithm {
     int LWM;
     int HWM;
     int AM;
-    private double OVERRATE;
 
-    public FirstVersionAlgorithm(int LWM, int HWM, int AM, double tcrScalingFactor, double initialTCR){
+    public FirstVersionAlgorithm(int LWM, int HWM, int AM, double initialTCR){
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
-        this.OVERRATE = tcrScalingFactor;
         estimatedTaskCompletionRatePerMillis = initialTCR / 1000;
     }
     @Override
@@ -70,8 +68,7 @@ public class FirstVersionAlgorithm implements Algorithm {
 
     @Override
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger, double overrate) {
-        OVERRATE = overrate;
-        estimatedTaskCompletionRatePerMillis = OVERRATE * (1 / clientFinishInterval);
-        logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + OVERRATE);
+        estimatedTaskCompletionRatePerMillis = overrate * (1 / clientFinishInterval);
+        logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + overrate);
     }
 }

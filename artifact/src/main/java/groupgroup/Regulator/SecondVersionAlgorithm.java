@@ -15,13 +15,11 @@ public class SecondVersionAlgorithm implements Algorithm {
     int LWM;
     int HWM;
     int AM;
-    private final double OVERRATE;
 
-    public SecondVersionAlgorithm(int LWM, int HWM, int AM, double tcrScalingFactor, double initialTCR){
+    public SecondVersionAlgorithm(int LWM, int HWM, int AM, double initialTCR){
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
-        this.OVERRATE = tcrScalingFactor;
         estimatedTaskCompletionRatePerMillis = initialTCR / 1000;
     }
     @Override

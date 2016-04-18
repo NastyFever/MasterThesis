@@ -22,11 +22,11 @@ public class Regulator {
         this.C_C = configuration.getCC();
         switch (configuration.getRegulatorAlgorithm()){
             case "FirstVersionAlgorithm":
-                this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
+                this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             case "SecondVersionAlgorithm":
-                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
+                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             default:
