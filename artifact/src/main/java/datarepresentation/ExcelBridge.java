@@ -36,7 +36,7 @@ public class ExcelBridge {
     }
 
     public void writeList(List<String> listOfTimes, List<String> listOfQueueLevels, List<String> listOfFinishedJobs,
-                          List<String> listOfTCRUpdateTimes, List<String> listOfTCR) {
+                          List<String> listOfTCR, List<String> listOfJobTimes) {
         try {
             Workbook copy = Workbook.getWorkbook(new File(FILE_NAME));
             WritableWorkbook workbook = Workbook.createWorkbook(new File(FILE_NAME), copy);
@@ -44,8 +44,8 @@ public class ExcelBridge {
             writeListToColumn(listOfTimes, sheet, FIRST_COLUMN, numberOfEntries);
             writeListToColumn(listOfQueueLevels, sheet, SECOND_COLUMN, numberOfEntries);
             writeListToColumn(listOfFinishedJobs, sheet, THIRD_COLUMN, numberOfEntries);
-            writeListToColumn(listOfTCRUpdateTimes, sheet, FOURTH_COLUMN, numberOfEntries);
-            writeListToColumn(listOfTCR, sheet, FIFTH_COLUMN, numberOfEntries);
+            writeListToColumn(listOfTCR, sheet, FOURTH_COLUMN, numberOfEntries);
+            writeListToColumn(listOfJobTimes, sheet, FIFTH_COLUMN, numberOfEntries);
             copy.close();
             workbook.write();
             workbook.close();
