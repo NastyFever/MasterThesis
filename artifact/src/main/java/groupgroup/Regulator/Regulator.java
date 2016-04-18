@@ -22,11 +22,11 @@ public class Regulator {
         this.C_C = configuration.getCC();
         switch (configuration.getRegulatorAlgorithm()){
             case "FirstVersionAlgorithm":
-                this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
+                this.algorithm = new FirstVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             case "SecondVersionAlgorithm":
-                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getTCRScalingFactor(), configuration.getInitialTCR());
+                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             default:
@@ -43,18 +43,29 @@ public class Regulator {
     }
 
     final double C_C;
-    double averageJobTime = 0;
     int numberOfServerUpdates = 0;
+    double sumOfJobTimes = 0;
+    double sumOfSquaredJobTimes = 0;
 
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
+        sumOfJobTimes += jobTime;
+        sumOfSquaredJobTimes += jobTime*jobTime;
+        double averageJobTime = sumOfJobTimes / numberOfServerUpdates;
+        double variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
+        double standardDeviation = Math.sqrt(variance);
+        LOGGER.info("Standard deviation: " + standardDeviation);
+
         LOGGER.info("New jobTime: " + jobTime);
-        averageJobTime = ( (numberOfServerUpdates - 1) * averageJobTime + jobTime) / numberOfServerUpdates;
         LOGGER.info("Average jobtime is set to " + averageJobTime);
 
-        double clientFinishIntervall = averageJobTime / C_C;
-        LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
-        algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER);
+        if ( numberOfServerUpdates > 1) {
+            double overrate = 1 + standardDeviation / averageJobTime;
+            double clientFinishIntervall = averageJobTime / C_C;
+            LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
+            LOGGER.info("eTCR : " + 1 / clientFinishIntervall);
+            algorithm.updateEstimatedTaskCompletionRate(clientFinishIntervall, LOGGER, overrate);
+        }
     }
 
     public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs, double jobTime) {
