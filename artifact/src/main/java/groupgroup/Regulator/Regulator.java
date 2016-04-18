@@ -43,10 +43,7 @@ public class Regulator {
     }
 
     final double C_C;
-    double averageJobTime = 0;
     int numberOfServerUpdates = 0;
-    double variance;
-    double standardDeviation;
     double sumOfJobTimes = 0;
     double sumOfSquaredJobTimes = 0;
 
@@ -54,9 +51,9 @@ public class Regulator {
 
         sumOfJobTimes += jobTime;
         sumOfSquaredJobTimes += jobTime*jobTime;
-        averageJobTime = sumOfJobTimes / numberOfServerUpdates;
-        variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
-        standardDeviation = Math.sqrt(variance);
+        double averageJobTime = sumOfJobTimes / numberOfServerUpdates;
+        double variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
+        double standardDeviation = Math.sqrt(variance);
         LOGGER.info("Standard deviation: " + standardDeviation);
 
         LOGGER.info("New jobTime: " + jobTime);
