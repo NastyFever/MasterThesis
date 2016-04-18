@@ -44,7 +44,6 @@ public class Regulator {
 
     final double C_C;
     double averageJobTime = 0;
-    private double oldAverageJobTime = -1;
     int numberOfServerUpdates = 0;
     double variance;
     double standardDeviation;
@@ -60,20 +59,11 @@ public class Regulator {
         standardDeviation = Math.sqrt(variance);
         LOGGER.info("Standard deviation: " + standardDeviation);
 
-        double certaintyMeasure = 0.0;
-        if(oldAverageJobTime < 0) {
-            oldAverageJobTime = averageJobTime;
-        } else {
-            certaintyMeasure = Math.min(oldAverageJobTime, averageJobTime) / Math.max(oldAverageJobTime, averageJobTime);
-            oldAverageJobTime = averageJobTime;
-        }
-        LOGGER.info("CertaintyMeasure: " + certaintyMeasure);
-
         LOGGER.info("New jobTime: " + jobTime);
         LOGGER.info("Average jobtime is set to " + averageJobTime);
 
         if ( numberOfServerUpdates > 1) {
-            double overrate = ( 1 + standardDeviation / averageJobTime ) * (1 + (1-certaintyMeasure));
+            double overrate = 1 + standardDeviation / averageJobTime;
             double clientFinishIntervall = averageJobTime / C_C;
             LOGGER.info("ClientFinishInterval set to " + clientFinishIntervall);
             LOGGER.info("eTCR : " + 1 / clientFinishIntervall);
