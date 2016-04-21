@@ -25,27 +25,34 @@ public class SecondVersionAlgorithm implements Algorithm {
     @Override
     public synchronized double getReturntime() {
         double currentTime = System.currentTimeMillis();
-        double waitDuration = 1 / estimatedTaskCompletionRatePerMillis;
-        double suggestedRetryTime = waitDuration * (1 + numberOfClientsInTheVirtualQueue.getAndIncrement());
+        double wantedWaitIntervall = 1 / estimatedTaskCompletionRatePerMillis;
+        double dynamicInsertBasedOnCounterRelativeTime = wantedWaitIntervall * (1 + numberOfClientsInTheVirtualQueue.getAndIncrement());
 
-        if(!isVirtualQueueEndInFuture(currentTime)) {
-            virtualQueueEndTime += currentTime + waitDuration;
-            return waitDuration;
+        if(!isVirtualQueueEndInFuture(currentTime)) { // Special case, queue empty, place first
+            virtualQueueEndTime = currentTime + wantedWaitIntervall;
+            return wantedWaitIntervall;
         }
-        else if(isSuggestedRetryTimeWithinBound(waitDuration, suggestedRetryTime, currentTime)) {
-            if(suggestedRetryTime + currentTime > virtualQueueEndTime) {
-                virtualQueueEndTime = suggestedRetryTime;
+        else if(isSuggestedRetryTimeWithinBound(wantedWaitIntervall,
+                dynamicInsertBasedOnCounterRelativeTime, currentTime)) { // In bound
+            double comeBackTime = dynamicInsertBasedOnCounterRelativeTime + currentTime;
+            if(isAfterVirtualQueueEnd(comeBackTime)) {
+                virtualQueueEndTime = comeBackTime;
             }
-            return suggestedRetryTime;
-        } else {
-            virtualQueueEndTime += waitDuration;
-            double retryTime = virtualQueueEndTime - currentTime + waitDuration;
-            return retryTime;
+            return dynamicInsertBasedOnCounterRelativeTime;
+        } else { // Queue not empty, not in bound
+            double comeBackTime = virtualQueueEndTime + wantedWaitIntervall;
+            double retryRelativeTime = comeBackTime - currentTime;
+            virtualQueueEndTime += comeBackTime;
+            return retryRelativeTime;
         }
     }
 
-    private boolean isSuggestedRetryTimeWithinBound(double waitDuration, double suggestedRetryTime, double currentTime) {
-        return virtualQueueEndTime + waitDuration >= suggestedRetryTime + currentTime;
+    private boolean isAfterVirtualQueueEnd(double comeBackTime) {
+        return comeBackTime > virtualQueueEndTime;
+    }
+
+    private boolean isSuggestedRetryTimeWithinBound(double wantedWaitIntervall, double dynamicInsertBasedOnCounterRelativeTime, double currentTime) {
+        return virtualQueueEndTime + wantedWaitIntervall >= currentTime + dynamicInsertBasedOnCounterRelativeTime;
     }
 
     private boolean isVirtualQueueEndInFuture(double currentTime) {
