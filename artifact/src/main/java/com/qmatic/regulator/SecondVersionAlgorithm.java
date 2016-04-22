@@ -42,7 +42,7 @@ public class SecondVersionAlgorithm implements Algorithm {
         } else { // Queue not empty, not in bound
             double comeBackTime = virtualQueueEndTime + wantedWaitIntervall;
             double retryRelativeTime = comeBackTime - currentTime;
-            virtualQueueEndTime += comeBackTime;
+            virtualQueueEndTime = comeBackTime;
             return retryRelativeTime;
         }
     }
