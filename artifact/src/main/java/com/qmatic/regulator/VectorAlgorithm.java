@@ -18,20 +18,18 @@ public class VectorAlgorithm extends SecondVersionAlgorithm {
     }
 
     protected ArrayList<Integer> computeQueues(double wantedComebackRate) {
-        System.out.println("CQ");
-        ArrayList<Integer> whatQueueToPick = new ArrayList<>();
+        ArrayList<Integer> whatQueuesToPick = new ArrayList<>();
         int rest = (int) Math.ceil(1000*wantedComebackRate); // aimed value for return rate
 
         for(int i = queues.length-1; i >= 0; i--){
             double quotient = rest / Math.pow(2, i);
-            System.out.println(i + " " + quotient);
             if (quotient >= 1){
-               whatQueueToPick.add((int) Math.pow(2,i));
+               whatQueuesToPick.add((int) Math.pow(2, i));
                 rest -= Math.pow(2,i);
             }
         }
 
-        return whatQueueToPick;
+        return whatQueuesToPick;
     }
 
 }
