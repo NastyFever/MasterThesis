@@ -1,4 +1,4 @@
-package groupgroup;
+package com.qmatic;
 
 import org.restexpress.util.Environment;
 

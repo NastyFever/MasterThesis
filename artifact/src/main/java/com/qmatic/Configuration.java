@@ -1,4 +1,4 @@
-package groupgroup;
+package com.qmatic;
 
 import java.util.Properties;
 

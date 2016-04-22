@@ -1,12 +1,11 @@
-package groupgroup.Regulator;
+package com.qmatic.regulator;
 
-import groupgroup.Main;
+import com.qmatic.Configuration;
+import com.qmatic.Main;
 import org.json.simple.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import groupgroup.Configuration;
 
 public class Regulator {
 

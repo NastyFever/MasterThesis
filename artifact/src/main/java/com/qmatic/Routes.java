@@ -1,4 +1,4 @@
-package groupgroup;
+package com.qmatic;
 
 import io.netty.handler.codec.http.HttpMethod;
 

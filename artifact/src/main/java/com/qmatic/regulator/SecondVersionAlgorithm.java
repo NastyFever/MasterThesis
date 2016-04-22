@@ -1,4 +1,4 @@
-package groupgroup.Regulator;
+package com.qmatic.regulator;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
     @Override
     public synchronized double getReturntime() {
-        double currentTime = System.currentTimeMillis();
+        double currentTime = getCurrentTimeInMillis();
         double wantedWaitIntervall = 1 / estimatedTaskCompletionRatePerMillis;
         double dynamicInsertBasedOnCounterRelativeTime = wantedWaitIntervall * (1 + numberOfClientsInTheVirtualQueue.getAndIncrement());
 
@@ -45,6 +45,10 @@ public class SecondVersionAlgorithm implements Algorithm {
             virtualQueueEndTime += comeBackTime;
             return retryRelativeTime;
         }
+    }
+
+    protected long getCurrentTimeInMillis() {
+        return System.currentTimeMillis();
     }
 
     private boolean isAfterVirtualQueueEnd(double comeBackTime) {

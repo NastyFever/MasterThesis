@@ -1,4 +1,4 @@
-package groupgroup.Regulator;
+package com.qmatic.regulator;
 
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;

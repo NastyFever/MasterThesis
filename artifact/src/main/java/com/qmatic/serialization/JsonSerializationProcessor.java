@@ -1,4 +1,4 @@
-package groupgroup.serialization;
+package com.qmatic.serialization;
 
 import org.restexpress.serialization.json.JacksonJsonProcessor;
 

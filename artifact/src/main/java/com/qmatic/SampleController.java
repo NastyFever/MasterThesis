@@ -1,9 +1,9 @@
-package groupgroup;
+package com.qmatic;
 
 import java.util.Collections;
 import java.util.List;
 
-import groupgroup.Regulator.Regulator;
+import com.qmatic.regulator.Regulator;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.restexpress.Request;
 import org.restexpress.Response;

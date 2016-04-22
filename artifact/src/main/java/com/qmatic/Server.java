@@ -1,8 +1,7 @@
-package groupgroup;
+package com.qmatic;
 
 import org.restexpress.RestExpress;
-import org.restexpress.pipeline.SimpleConsoleLogMessageObserver;
-import groupgroup.serialization.SerializationProvider;
+import com.qmatic.serialization.SerializationProvider;
 
 public class Server
 {
