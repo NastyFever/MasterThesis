@@ -75,7 +75,7 @@ public class Regulator {
         }
     }
 
-    public void receivedUpdateFromApplicationServer(long numberOfFinishedJobs) {
+    public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs) {
         this.numberOfFinishedJobs = numberOfFinishedJobs;
         LOGGER.info("Number of finished jobs is: " +  numberOfFinishedJobs);
         long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
