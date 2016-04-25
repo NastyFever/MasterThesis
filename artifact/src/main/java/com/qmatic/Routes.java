@@ -1,7 +1,6 @@
 package com.qmatic;
 
 import io.netty.handler.codec.http.HttpMethod;
-
 import org.restexpress.RestExpress;
 
 public abstract class Routes
@@ -21,9 +20,13 @@ public abstract class Routes
                 .action("init", HttpMethod.PUT)
                 .name(Constants.Routes.INIT);
 
+        server.uri("/regulator/update?{" + Constants.Url.numberOfAcceptedJobs + "}.{format}", config.getSampleController())
+                .action("updateRegulator", HttpMethod.PUT)
+                .name(Constants.Routes.UPDATE);
+
         server.uri("/regulator/update?{" + Constants.Url.numberOfAcceptedJobs + Constants.Url.jobTime + "}.{format}", config.getSampleController())
-            .action("updateRegulator", HttpMethod.PUT)
-            .name(Constants.Routes.UPDATE);
+            .action("updateRegulatorJobTime", HttpMethod.PUT)
+            .name(Constants.Routes.UPDATE_WITH_JOBTIME);
 
         server.uri("/your/route/here.{format}", config.getSampleController())
 			.action("readAll", HttpMethod.GET)

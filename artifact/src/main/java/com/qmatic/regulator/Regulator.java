@@ -68,14 +68,20 @@ public class Regulator {
     }
 
     public synchronized void receivedUpdateFromApplicationServer(long numberOfFinishedJobs, double jobTime) {
-        this.numberOfFinishedJobs = numberOfFinishedJobs;
-        long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
+        receivedUpdateFromApplicationServer(numberOfFinishedJobs);
         ++numberOfServerUpdates;
         if (tcrLiveUpdate) {
             onlineUpdateOfTaskCompletionRate(jobTime);
         }
-        LOGGER.info("Number of active tokens is: " + numberOfActiveClients);
+    }
+
+    public void receivedUpdateFromApplicationServer(long numberOfFinishedJobs) {
+        this.numberOfFinishedJobs = numberOfFinishedJobs;
         LOGGER.info("Number of finished jobs is: " +  numberOfFinishedJobs);
+        long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
+        LOGGER.info("Number of active tokens is: " + numberOfActiveClients);
+
+
     }
 
     public long getNumberOfReleasedTokens() {
