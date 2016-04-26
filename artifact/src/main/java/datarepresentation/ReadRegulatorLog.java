@@ -28,12 +28,6 @@ public class ReadRegulatorLog {
         eightTimes = new AtomicInteger(0),
         nineTimesOrMore = new AtomicInteger(0);
 
-    static List<String> listOfQueueLevels = new ArrayList<>();
-    static List<String> listOfFinishedJobs = new ArrayList<>();
-    static List<String> listOfTimes = new ArrayList<>();
-    static List<String> listOfTCR = new ArrayList<>();
-    static List<String> listOfJobTimes = new ArrayList<>();
-
     private static void parseFile() {
         String fileName = "C:\\Programmering\\Exjobb\\log.log";
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
@@ -43,8 +37,6 @@ public class ReadRegulatorLog {
            ExcelBridge exl = new ExcelBridge();
 
             exl.writeEntries(entries);
-//            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs,
-//                    listOfTCR, listOfJobTimes);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -77,33 +69,6 @@ public class ReadRegulatorLog {
         return (double) tmp / factor;
     }
 
-    static boolean skip = false;
-    private static void processLine(String line) {
-        String word[] = line.split(" ");
-        if(isGivenAccessLine(line)) {
-            updateNumberRetries(Integer.parseInt(word[word.length - 2]));
-        } else if(isNewJobTimeLine(line)) {
-            int subtractFromStringToGetInSeconds = 3;
-            String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
-            if(!listOfTimes.contains(timeAsString)){
-                skip=false;
-                listOfTimes.add(timeAsString);
-                listOfJobTimes.add(word[word.length - 1]);
-            } else {
-                skip = true;
-            }
-        } else if(!skip) {
-            if(isActiveTokensLine(line)) {
-                listOfQueueLevels.add(word[word.length - 1]);
-            } else if(isNumberOfFinishedJobsLine(line)) {
-                listOfFinishedJobs.add(word[word.length - 1]);
-            } else if(isEstimatedTaskCompletionRateLine(line)) {
-                listOfTCR.add(Double.toString(round(Double.parseDouble(word[word.length - 6]), 5)));
-            }
-        }
-    }
-
-
     static ArrayList<Entry> entries = new ArrayList<>();
     static Entry workingEntry = new Entry();
     static HashMap<String, Integer> timeToArrayIdMap = new HashMap<>();
@@ -124,10 +89,22 @@ public class ReadRegulatorLog {
             String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
             workingEntry.activeChannels = word[word.length - 1];
             workingEntry.time = timeAsString;
-            entries.add(workingEntry);
+            onlyAddOneEntryPerSecondFilter(workingEntry);
             workingEntry = new Entry();
         }
 
+    }
+
+    private static void onlyAddOneEntryPerSecondFilter(Entry entry) {
+        if(timeToArrayIdMap.containsKey(entry.time)) {
+            int id = timeToArrayIdMap.get(entry.time);
+            if(entries.get(id).jobTime == null) {
+                entries.set(id, entry);
+            }
+        } else {
+            entries.add(entry);
+            timeToArrayIdMap.put(entry.time, entries.size()-1);
+        }
     }
 
 
