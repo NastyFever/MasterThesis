@@ -107,6 +107,7 @@ public class ReadRegulatorLog {
     static ArrayList<Entry> entries = new ArrayList<>();
     static Entry workingEntry = new Entry();
     static HashMap<String, Integer> timeToArrayIdMap = new HashMap<>();
+    static int initialNumberOfFinishedJobs = -1;
 
     private static void buildEntry(String line) {
         String word[] = line.split(" ");
@@ -118,7 +119,10 @@ public class ReadRegulatorLog {
         } else if(isEstimatedTaskCompletionRateLine(line)) {
             workingEntry.comeBackRate = Double.toString(round(Double.parseDouble(word[word.length - 6]), 5));
         } else if(isNumberOfFinishedJobsLine(line)) {
-            workingEntry.finishedJobs = word[word.length - 1];
+            if (initialNumberOfFinishedJobs == -1) {
+                initialNumberOfFinishedJobs = Integer.parseInt(word[word.length -1]);
+            }
+            workingEntry.finishedJobs = String.valueOf(Integer.parseInt(word[word.length - 1]) - initialNumberOfFinishedJobs);
         } else if(isActiveTokensLine(line)) {
             int subtractFromStringToGetInSeconds = 3;
             String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
