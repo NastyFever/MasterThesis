@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -37,12 +38,13 @@ public class ReadRegulatorLog {
         String fileName = "C:\\Programmering\\Exjobb\\log.log";
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             stream.forEach(line ->
-                processLine(line)
+                buildEntry(line)
             );
            ExcelBridge exl = new ExcelBridge();
 
-            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs,
-                    listOfTCR, listOfJobTimes);
+            exl.writeEntries(entries);
+//            exl.writeList(listOfTimes, listOfQueueLevels, listOfFinishedJobs,
+//                    listOfTCR, listOfJobTimes);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -100,6 +102,34 @@ public class ReadRegulatorLog {
             }
         }
     }
+
+
+    static ArrayList<Entry> entries = new ArrayList<>();
+    static Entry workingEntry = new Entry();
+    static HashMap<String, Integer> timeToArrayIdMap = new HashMap<>();
+
+    private static void buildEntry(String line) {
+        String word[] = line.split(" ");
+
+        if(isGivenAccessLine(line)) {
+            updateNumberRetries(Integer.parseInt(word[word.length - 2]));
+        } else if(isNewJobTimeLine(line)) {
+            workingEntry.jobTime = word[word.length - 1];
+        } else if(isEstimatedTaskCompletionRateLine(line)) {
+            workingEntry.comeBackRate = Double.toString(round(Double.parseDouble(word[word.length - 6]), 5));
+        } else if(isNumberOfFinishedJobsLine(line)) {
+            workingEntry.finishedJobs = word[word.length - 1];
+        } else if(isActiveTokensLine(line)) {
+            int subtractFromStringToGetInSeconds = 3;
+            String timeAsString = word[0].substring(0, word[0].length() - subtractFromStringToGetInSeconds);
+            workingEntry.activeChannels = word[word.length - 1];
+            workingEntry.time = timeAsString;
+            entries.add(workingEntry);
+            workingEntry = new Entry();
+        }
+
+    }
+
 
     private static boolean isGivenAccessLine(String line) {
         return line.endsWith("tries");

@@ -2,6 +2,7 @@ package datarepresentation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jxl.Workbook;
@@ -58,12 +59,47 @@ public class ExcelBridge {
         }
     }
 
-    private void writeListToColumn(List<String> listOfTimes, WritableSheet sheet, int column, int startOnRow) throws WriteException {
+    private void writeListToColumn(List<String> list, WritableSheet sheet, int column, int startOnRow) throws WriteException {
         Label label;
-        for(String time : listOfTimes) {
-            label = new Label(column, startOnRow, time);
+        for(String element : list) {
+            label = new Label(column, startOnRow, element);
             sheet.addCell(label);
             ++startOnRow;
+        }
+    }
+
+    private void writeEntryToRow(Entry entry, WritableSheet sheet, int row) throws WriteException {
+        Label label;
+        label = new Label(FIRST_COLUMN, row, entry.time);
+        sheet.addCell(label);
+        label = new Label(SECOND_COLUMN, row, entry.activeChannels);
+        sheet.addCell(label);
+        label = new Label(THIRD_COLUMN, row, entry.finishedJobs);
+        sheet.addCell(label);
+        label = new Label(FOURTH_COLUMN, row, entry.comeBackRate);
+        sheet.addCell(label);
+        label = new Label(FIFTH_COLUMN, row, entry.jobTime);
+        sheet.addCell(label);
+    }
+
+    public void writeEntries(ArrayList<Entry> entries) {
+        try {
+            Workbook copy = Workbook.getWorkbook(new File(FILE_NAME));
+            WritableWorkbook workbook = Workbook.createWorkbook(new File(FILE_NAME), copy);
+            WritableSheet sheet = workbook.getSheet(0);
+            for(Entry entry : entries) {
+                writeEntryToRow(entry, sheet, numberOfEntries);
+                ++numberOfEntries;
+            }
+            copy.close();
+            workbook.write();
+            workbook.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
         }
     }
 }
