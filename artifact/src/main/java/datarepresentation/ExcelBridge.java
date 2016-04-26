@@ -36,38 +36,6 @@ public class ExcelBridge {
         }
     }
 
-    public void writeList(List<String> listOfTimes, List<String> listOfQueueLevels, List<String> listOfFinishedJobs,
-                          List<String> listOfTCR, List<String> listOfJobTimes) {
-        try {
-            Workbook copy = Workbook.getWorkbook(new File(FILE_NAME));
-            WritableWorkbook workbook = Workbook.createWorkbook(new File(FILE_NAME), copy);
-            WritableSheet sheet = workbook.getSheet(0);
-            writeListToColumn(listOfTimes, sheet, FIRST_COLUMN, numberOfEntries);
-            writeListToColumn(listOfQueueLevels, sheet, SECOND_COLUMN, numberOfEntries);
-            writeListToColumn(listOfFinishedJobs, sheet, THIRD_COLUMN, numberOfEntries);
-            writeListToColumn(listOfTCR, sheet, FOURTH_COLUMN, numberOfEntries);
-            writeListToColumn(listOfJobTimes, sheet, FIFTH_COLUMN, numberOfEntries);
-            copy.close();
-            workbook.write();
-            workbook.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void writeListToColumn(List<String> list, WritableSheet sheet, int column, int startOnRow) throws WriteException {
-        Label label;
-        for(String element : list) {
-            label = new Label(column, startOnRow, element);
-            sheet.addCell(label);
-            ++startOnRow;
-        }
-    }
-
     private void writeEntryToRow(Entry entry, WritableSheet sheet, int row) throws WriteException {
         Label label;
         label = new Label(FIRST_COLUMN, row, entry.time);
