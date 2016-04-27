@@ -80,8 +80,6 @@ public class Regulator {
         LOGGER.info("Number of finished jobs is: " +  numberOfFinishedJobs);
         long numberOfActiveClients = algorithm.getNumberOfReleasedTokens() - numberOfFinishedJobs;
         LOGGER.info("Number of active tokens is: " + numberOfActiveClients);
-
-
     }
 
     public long getNumberOfReleasedTokens() {

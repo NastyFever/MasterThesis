@@ -2,6 +2,7 @@ package datarepresentation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jxl.Workbook;
@@ -35,17 +36,29 @@ public class ExcelBridge {
         }
     }
 
-    public void writeList(List<String> listOfTimes, List<String> listOfQueueLevels, List<String> listOfFinishedJobs,
-                          List<String> listOfTCR, List<String> listOfJobTimes) {
+    private void writeEntryToRow(Entry entry, WritableSheet sheet, int row) throws WriteException {
+        Label label;
+        label = new Label(FIRST_COLUMN, row, entry.time);
+        sheet.addCell(label);
+        label = new Label(SECOND_COLUMN, row, entry.activeChannels);
+        sheet.addCell(label);
+        label = new Label(THIRD_COLUMN, row, entry.finishedJobs);
+        sheet.addCell(label);
+        label = new Label(FOURTH_COLUMN, row, entry.comeBackRate);
+        sheet.addCell(label);
+        label = new Label(FIFTH_COLUMN, row, entry.jobTime);
+        sheet.addCell(label);
+    }
+
+    public void writeEntries(ArrayList<Entry> entries) {
         try {
             Workbook copy = Workbook.getWorkbook(new File(FILE_NAME));
             WritableWorkbook workbook = Workbook.createWorkbook(new File(FILE_NAME), copy);
             WritableSheet sheet = workbook.getSheet(0);
-            writeListToColumn(listOfTimes, sheet, FIRST_COLUMN, numberOfEntries);
-            writeListToColumn(listOfQueueLevels, sheet, SECOND_COLUMN, numberOfEntries);
-            writeListToColumn(listOfFinishedJobs, sheet, THIRD_COLUMN, numberOfEntries);
-            writeListToColumn(listOfTCR, sheet, FOURTH_COLUMN, numberOfEntries);
-            writeListToColumn(listOfJobTimes, sheet, FIFTH_COLUMN, numberOfEntries);
+            for(Entry entry : entries) {
+                writeEntryToRow(entry, sheet, numberOfEntries);
+                ++numberOfEntries;
+            }
             copy.close();
             workbook.write();
             workbook.close();
@@ -55,15 +68,6 @@ public class ExcelBridge {
             e.printStackTrace();
         } catch (BiffException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void writeListToColumn(List<String> listOfTimes, WritableSheet sheet, int column, int startOnRow) throws WriteException {
-        Label label;
-        for(String time : listOfTimes) {
-            label = new Label(column, startOnRow, time);
-            sheet.addCell(label);
-            ++startOnRow;
         }
     }
 }
