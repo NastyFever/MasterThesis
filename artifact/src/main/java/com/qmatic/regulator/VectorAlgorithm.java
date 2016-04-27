@@ -27,7 +27,7 @@ public class VectorAlgorithm extends SecondVersionAlgorithm {
         return relativeWaitTime;
     }
 
-    protected synchronized int placeInVirtualQueueAndGetWaitTime(ArrayList<Integer> queueIds) {
+    protected synchronized long placeInVirtualQueueAndGetWaitTime(ArrayList<Integer> queueIds) {
         long currentTime = getCurrentTimeInMillis();
         // First check if any of the queues is empty, if so return fastest queue
         for(int queueRate : queueIds) {
@@ -35,7 +35,7 @@ public class VectorAlgorithm extends SecondVersionAlgorithm {
             if (queueEndTime < currentTime) {
                 queues[lookUpMap.get(queueRate)] = currentTime
                         + convertRateFromPerSecondToIntervalInMillis(queueRate);
-                return queueRate;
+                return convertRateFromPerSecondToIntervalInMillis(queueRate);
             }
         }
         // Second, if non of the queues where empty, add to the shortest
@@ -49,7 +49,7 @@ public class VectorAlgorithm extends SecondVersionAlgorithm {
             }
         }
         queues[lookUpMap.get(choosedQueueRate)] += convertRateFromPerSecondToIntervalInMillis(choosedQueueRate);
-        return choosedQueueRate;
+        return queues[lookUpMap.get(choosedQueueRate)] - currentTime;
     }
 
     private int convertRateFromPerSecondToIntervalInMillis(int choosedQueueRate) {
