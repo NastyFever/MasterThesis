@@ -9,8 +9,8 @@ public class VectorAlgorithm extends SecondVersionAlgorithm {
 
     public HashMap<Integer, Integer> lookUpMap = new HashMap<>();
 
-    public VectorAlgorithm(int LWM, int HWM, int AM, double initialTCR){
-        super(LWM, HWM, AM, initialTCR);
+    public VectorAlgorithm(int LWM, int HWM, int AM, double initialTCR, boolean fairness){
+        super(LWM, HWM, AM, initialTCR, fairness);
         buildLookUpMap();
     }
 

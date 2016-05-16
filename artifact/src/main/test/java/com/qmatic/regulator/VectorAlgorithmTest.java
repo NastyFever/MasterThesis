@@ -19,7 +19,7 @@ public class VectorAlgorithmTest {
     public void testComputeWhatQueuesToFill() throws Exception {
         int HWM = 400, LWM = 0, AM = 300;
         double INITIAL_TCR = 8;
-        VectorAlgorithm alg = Mockito.spy(new VectorAlgorithm(LWM, HWM, AM, INITIAL_TCR));
+        VectorAlgorithm alg = Mockito.spy(new VectorAlgorithm(LWM, HWM, AM, INITIAL_TCR, configuration.isFairness()));
 
         ArrayList<Object> expectedFirstAssertReturn = new ArrayList<>();
         expectedFirstAssertReturn.add(8);
@@ -39,9 +39,9 @@ public class VectorAlgorithmTest {
     public void testChooseQueueId() throws Exception {
         int HWM = 400, LWM = 0, AM = 300;
         double INITIAL_TCR = 8;
-        VectorAlgorithm alg = Mockito.spy(new VectorAlgorithm(LWM, HWM, AM, INITIAL_TCR));
+        VectorAlgorithm alg = Mockito.spy(new VectorAlgorithm(LWM, HWM, AM, INITIAL_TCR, configuration.isFairness()));
         testBasicBehaviourForChooseQueueId(alg);
-        alg = Mockito.spy(new VectorAlgorithm(LWM, HWM, AM, INITIAL_TCR));
+        alg = Mockito.spy(new VectorAlgorithm(LWM, HWM, AM, INITIAL_TCR, configuration.isFairness()));
         testPlaceInVirtualQueueAndGetWaitTime(alg);
     }
 

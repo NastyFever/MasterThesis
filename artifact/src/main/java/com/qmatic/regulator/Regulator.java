@@ -25,7 +25,11 @@ public class Regulator {
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             case "SecondVersionAlgorithm":
-                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
+                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR(), configuration.isFairness());
+                LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
+                break;
+            case "VectorAlgorithm":
+                this.algorithm = new VectorAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR(), configuration.isFairness());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             default:
