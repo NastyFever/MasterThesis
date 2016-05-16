@@ -28,6 +28,10 @@ public class Regulator {
                 this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
+            case "VectorAlgorithm":
+                this.algorithm = new VectorAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
+                LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
+                break;
             default:
                 LOGGER.error("Invalid algorithm type");
                 System.err.print("Invalid algorithm type");
