@@ -3,6 +3,8 @@ package com.qmatic.regulator;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -12,9 +14,11 @@ public class SecondVersionAlgorithm implements Algorithm {
     private double virtualQueueEndTime = 0;
     private AtomicLong numberOfClientsInTheVirtualQueue = new AtomicLong(0L);
 
-    int LWM;
-    int HWM;
-    int AM;
+    private int LWM;
+    private int HWM;
+    private int AM;
+    private double virtualQueueAverage = 0;
+    private HashMap<Integer, Integer> numberOfRequestsPerRetryInTheVirtualQueue = new HashMap<>();
 
     public SecondVersionAlgorithm(int LWM, int HWM, int AM, double initialTCR){
         this.LWM = LWM;
@@ -76,7 +80,83 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     private JSONObject passRequestThroughFairnessGate(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
         JSONObject jc = new JSONObject();
+        if(hasRetried(numberOfRetries)) {
+            numberOfClientsInTheVirtualQueue.decrementAndGet();
+        }
+        try {
+            checkThenSet.acquire(); // We have to protect the check.
+            boolean go = false;
+            long queueLevel = numberOfReleasedTokens - numberOfFinishedJobs;
+            if(isQueueLevelLessThanFirstQuarterThreshold(queueLevel)) { // Free go
+                go = true;
+            } else if (isQueueLevelLessThanSecondQuarterThreshold(queueLevel) && hasRetried(numberOfRetries)) { // Prio 3
+                go = true;
+            } else if (isQueueLevelLessThanThirdQuarterThreshold(queueLevel) && isOverAverage(numberOfRetries)) { // Prio 2
+                go = true;
+            } else if (isQueueLevelLessThanFourthQuarterthreshold(queueLevel) && isTopPrioritized(numberOfRetries)) { // Prio 1
+                go = true;
+            }
+
+            if(go) {
+                long accessToken = ++numberOfReleasedTokens;
+                if (hasRetried( numberOfRetries)) {
+                    numberOfRequestsPerRetryInTheVirtualQueue.put(numberOfRetries, numberOfRequestsPerRetryInTheVirtualQueue.get(numberOfRetries) - 1);
+                }
+                checkThenSet.release();
+                jc.put("Type", "AccessService");
+                jc.put("Token", accessToken);
+                logger.info("Client was given access after " + numberOfRetries + " tries");
+            } else {
+                int updatedNumberOfRetries = numberOfRetries + 1;
+                if(numberOfRequestsPerRetryInTheVirtualQueue.containsKey(updatedNumberOfRetries)) {
+                    numberOfRequestsPerRetryInTheVirtualQueue.put(updatedNumberOfRetries, numberOfRequestsPerRetryInTheVirtualQueue.get(updatedNumberOfRetries) + 1);
+                } else {
+                    numberOfRequestsPerRetryInTheVirtualQueue.put(updatedNumberOfRetries, 1);
+                }
+                checkThenSet.release();
+                jc.put("Type", "ScheduleMessage");
+                jc.put("ReturnTime", getReturntime());
+                if (numberOfClientsInTheVirtualQueue.get() != 0) {
+                    virtualQueueAverage = (updatedNumberOfRetries + virtualQueueAverage / numberOfClientsInTheVirtualQueue.get()) / (virtualQueueAverage + 1.0);
+                } else {
+                    virtualQueueAverage = updatedNumberOfRetries;
+                }
+            }
+        } catch (InterruptedException e) {
+            logger.info("Got interupted when checking if the regulator should release token: " + e.getMessage());
+            checkThenSet.release();
+        }
+
+
         return jc;
+    }
+
+    private boolean isTopPrioritized(int numberOfRetries) {
+        return numberOfRetries == Collections.max(numberOfRequestsPerRetryInTheVirtualQueue.keySet());
+    }
+
+    private boolean isQueueLevelLessThanFourthQuarterthreshold(long queueLevel) {
+        return queueLevel < HWM;
+    }
+
+    private boolean isOverAverage(int numberOfRetries) {
+        return numberOfRetries > virtualQueueAverage;
+    }
+
+    private boolean isQueueLevelLessThanThirdQuarterThreshold(long queueLevel) {
+        return queueLevel < LWM + 3 * (HWM - LWM) / 4;
+    }
+
+    private boolean isQueueLevelLessThanSecondQuarterThreshold(long queueLevel) {
+        return queueLevel < LWM + (HWM - LWM) / 2;
+    }
+
+    private boolean hasRetried(int numberOfRetries) {
+        return numberOfRetries > 0;
+    }
+
+    private boolean isQueueLevelLessThanFirstQuarterThreshold(long queueLevel) {
+        return queueLevel < LWM + (HWM - LWM) / 4;
     }
 
     private JSONObject passRequestThroughDefaultGate(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {

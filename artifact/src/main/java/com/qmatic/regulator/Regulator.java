@@ -49,7 +49,7 @@ public class Regulator {
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
         sumOfJobTimes += jobTime;
-        sumOfSquaredJobTimes += jobTime*jobTime;
+        sumOfSquaredJobTimes += jobTime * jobTime;
         double averageJobTime = sumOfJobTimes / numberOfServerUpdates;
         double variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
         double standardDeviation = Math.sqrt(variance);
