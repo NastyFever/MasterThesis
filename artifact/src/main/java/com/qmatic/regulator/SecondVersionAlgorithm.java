@@ -15,11 +15,13 @@ public class SecondVersionAlgorithm implements Algorithm {
     int LWM;
     int HWM;
     int AM;
+    boolean fairness;
 
-    public SecondVersionAlgorithm(int LWM, int HWM, int AM, double initialTCR){
+    public SecondVersionAlgorithm(int LWM, int HWM, int AM, double initialTCR, boolean fairness){
         this.LWM = LWM;
         this.HWM = HWM;
         this.AM = AM;
+        this.fairness = fairness;
         estimatedTaskCompletionRatePerMillis = initialTCR / 1000;
     }
     @Override
@@ -67,7 +69,7 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     @Override
     public JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
-        if(true) {
+        if(fairness) {
             return passRequestThroughDefaultGate(numberOfFinishedJobs, numberOfRetries, logger);
         } else {
             return passRequestThroughFairnessGate(numberOfFinishedJobs, numberOfRetries, logger);

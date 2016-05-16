@@ -13,11 +13,11 @@ public class SecondVersionAlgorithmTest {
         int HWM = 400, LWM = 0, AM = 300;
         double INITIAL_TCR = 8;
 
-        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR));
+        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, configuration.isFairness()));
         testAddWithoutTCRChange(alg);
-        alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR));
+        alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, configuration.isFairness()));
         testAddWhenTCRGoesFromSlowToFast(alg);
-        alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR));
+        alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, configuration.isFairness()));
         testAddWhenTCRGoesFromSlowToFastToSlow(alg);
     }
 
