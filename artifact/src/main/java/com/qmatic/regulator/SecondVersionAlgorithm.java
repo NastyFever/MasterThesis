@@ -67,6 +67,19 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     @Override
     public JSONObject runAlgorithm(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
+        if(true) {
+            return passRequestThroughDefaultGate(numberOfFinishedJobs, numberOfRetries, logger);
+        } else {
+            return passRequestThroughFairnessGate(numberOfFinishedJobs, numberOfRetries, logger);
+        }
+    }
+
+    private JSONObject passRequestThroughFairnessGate(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
+        JSONObject jc = new JSONObject();
+        return jc;
+    }
+
+    private JSONObject passRequestThroughDefaultGate(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
         JSONObject jc = new JSONObject();
         if(numberOfRetries > 0) {
             numberOfClientsInTheVirtualQueue.decrementAndGet();
@@ -89,7 +102,6 @@ public class SecondVersionAlgorithm implements Algorithm {
             logger.info("Got interupted when checking if the regulator should release token: " + e.getMessage());
             checkThenSet.release();
         }
-
         return jc;
     }
 
