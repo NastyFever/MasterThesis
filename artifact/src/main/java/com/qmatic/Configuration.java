@@ -58,7 +58,7 @@ extends Environment
 		this.initialTCR = Double.parseDouble(p.getProperty(REGULATOR_INITIAL_TCR));
 		this.TCRLiveUpdate = Boolean.parseBoolean(p.getProperty(REGULATOR_TCR_LIVE_UPDATE));
         this.CC = Double.parseDouble(p.getProperty(REGULATOR_CC));
-		this.fairness = Boolean.parseBoolean(REGULATOR_FAIRNESS);
+		this.fairness = Boolean.parseBoolean(p.getProperty(REGULATOR_FAIRNESS));
     }
 
     private void initialize()
