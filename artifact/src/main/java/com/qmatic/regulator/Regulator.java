@@ -27,10 +27,12 @@ public class Regulator {
             case "SecondVersionAlgorithm":
                 this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR(), configuration.isFairness());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
+                LOGGER.info("Using fairness=" + configuration.isFairness());
                 break;
             case "VectorAlgorithm":
                 this.algorithm = new VectorAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR(), configuration.isFairness());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
+                LOGGER.info("Using fairness=" + configuration.isFairness());
                 break;
             default:
                 LOGGER.error("Invalid algorithm type");
