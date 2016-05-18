@@ -99,11 +99,16 @@ public class SecondVersionAlgorithm implements Algorithm {
                 go = true;
             }
 
-            if(go) {
-                long accessToken = ++numberOfReleasedTokens;
-                if (hasRetried( numberOfRetries)) {
+            if(hasRetried( numberOfRetries)) {
+                if(numberOfRequestsPerRetryInTheVirtualQueue.get(numberOfRetries) == 1) {
+                    numberOfRequestsPerRetryInTheVirtualQueue.remove(numberOfRetries);
+                } else {
                     numberOfRequestsPerRetryInTheVirtualQueue.put(numberOfRetries, numberOfRequestsPerRetryInTheVirtualQueue.get(numberOfRetries) - 1);
                 }
+            }
+
+            if(go) {
+                long accessToken = ++numberOfReleasedTokens;
                 checkThenSet.release();
                 jc.put("Type", "AccessService");
                 jc.put("Token", accessToken);
