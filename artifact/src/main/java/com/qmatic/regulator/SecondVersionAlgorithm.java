@@ -159,7 +159,26 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     private boolean isTopPrioritized(int numberOfRetries) {
         if (numberOfClientsInTheVirtualQueue.get() > 0) {
-            return numberOfRetries >= Collections.max(numberOfRequestsPerRetryInTheVirtualQueue.keySet());
+
+            Set<Integer> keySet = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
+            int lowestRetryLevelInTheHighestPrioritizedGroup = Collections.max(keySet);
+            int numberOfTopPrioritized = (HWM - LWM) / 4;
+
+            int sum = numberOfRequestsPerRetryInTheVirtualQueue.get(lowestRetryLevelInTheHighestPrioritizedGroup);
+            while (sum < numberOfTopPrioritized && lowestRetryLevelInTheHighestPrioritizedGroup - 1 > 0) {
+                if(numberOfRequestsPerRetryInTheVirtualQueue.containsKey(lowestRetryLevelInTheHighestPrioritizedGroup - 1)) {
+                    int numberOfRequestsInThisRetryLevel = numberOfRequestsPerRetryInTheVirtualQueue.get(lowestRetryLevelInTheHighestPrioritizedGroup - 1);
+                    if(numberOfRequestsInThisRetryLevel + sum < numberOfTopPrioritized) {
+                        sum += numberOfRequestsInThisRetryLevel;
+                        --lowestRetryLevelInTheHighestPrioritizedGroup;
+                    } else {
+                        break;
+                    }
+                } else {
+                    --lowestRetryLevelInTheHighestPrioritizedGroup;
+                }
+            }
+            return numberOfRetries >= lowestRetryLevelInTheHighestPrioritizedGroup;
         } else {
             return false;
         }
