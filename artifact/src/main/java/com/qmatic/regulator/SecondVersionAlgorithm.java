@@ -137,8 +137,10 @@ public class SecondVersionAlgorithm implements Algorithm {
         Set<Integer> keys = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
 
         double average = 0.0;
-        for(int key : keys) {
-            average += 1.0 * key * getNumberOfRequestsPerRetryInTheVirtualQueue().get(key) / numberOfClientsInTheVirtualQueue.get();
+        if(numberOfClientsInTheVirtualQueue.get() > 0) {
+            for(int key : keys) {
+                average += 1.0 * key * getNumberOfRequestsPerRetryInTheVirtualQueue().get(key) / numberOfClientsInTheVirtualQueue.get();
+            }
         }
         return average;
     }
