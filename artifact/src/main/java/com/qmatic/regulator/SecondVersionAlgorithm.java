@@ -14,24 +14,16 @@ public class SecondVersionAlgorithm implements Algorithm {
     public double estimatedTaskCompletionRatePerMillis;
     private double virtualQueueEndTime = 0;
 
-    public void setNumberOfClientsInTheVirtualQueue(AtomicLong numberOfClientsInTheVirtualQueue) {
-        this.numberOfClientsInTheVirtualQueue = numberOfClientsInTheVirtualQueue;
-    }
-
     private AtomicLong numberOfClientsInTheVirtualQueue = new AtomicLong(0L);
 
     private int LWM;
     private int HWM;
     private int AM;
 
-    private double virtualQueueAverage = 0;
-
-    protected HashMap<Integer, Integer> getNumberOfRequestsPerRetryInTheVirtualQueue() {
-        return numberOfRequestsPerRetryInTheVirtualQueue;
-    }
+    private double virtualQueueAverage = 0.0;
 
     private HashMap<Integer, Integer> numberOfRequestsPerRetryInTheVirtualQueue = new HashMap<>();
-    boolean fairness;
+    private boolean fairness;
 
     public SecondVersionAlgorithm(int LWM, int HWM, int AM, double initialTCR, boolean fairness){
         this.LWM = LWM;
@@ -103,6 +95,7 @@ public class SecondVersionAlgorithm implements Algorithm {
             long queueLevel = numberOfReleasedTokens - numberOfFinishedJobs;
             decrementMapFor(numberOfRetries);
             virtualQueueAverage = computeVirtualQueueAverage();
+
             if(isQueueLevelLessThanFirstQuarterThreshold(queueLevel)) { // Free go
                 go = true;
             } else if (isQueueLevelLessThanSecondQuarterThreshold(queueLevel) && hasRetried(numberOfRetries)) { // Prio 3
@@ -134,10 +127,10 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
 
     protected double computeVirtualQueueAverage() {
-        Set<Integer> keys = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
 
         double average = 0.0;
         if(numberOfClientsInTheVirtualQueue.get() > 0) {
+            Set<Integer> keys = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
             for(int key : keys) {
                 average += 1.0 * key * getNumberOfRequestsPerRetryInTheVirtualQueue().get(key) / numberOfClientsInTheVirtualQueue.get();
             }
@@ -155,7 +148,7 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
 
     protected void decrementMapFor(int numberOfRetries) {
-        if(hasRetried( numberOfRetries)) {
+        if(hasRetried(numberOfRetries)) {
             if(numberOfRequestsPerRetryInTheVirtualQueue.get(numberOfRetries) == 1) {
                 numberOfRequestsPerRetryInTheVirtualQueue.remove(numberOfRetries);
             } else {
@@ -165,7 +158,11 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
 
     private boolean isTopPrioritized(int numberOfRetries) {
-        return numberOfRetries >= Collections.max(numberOfRequestsPerRetryInTheVirtualQueue.keySet());
+        if (numberOfClientsInTheVirtualQueue.get() > 0) {
+            return numberOfRetries >= Collections.max(numberOfRequestsPerRetryInTheVirtualQueue.keySet());
+        } else {
+            return false;
+        }
     }
 
     private boolean isQueueLevelLessThanFourthQuarterthreshold(long queueLevel) {
@@ -241,5 +238,13 @@ public class SecondVersionAlgorithm implements Algorithm {
     public void updateEstimatedTaskCompletionRate(double clientFinishInterval, Logger logger, double overrate) {
         estimatedTaskCompletionRatePerMillis = ( 1 / clientFinishInterval) * overrate;
         logger.info("Updated the estimated task completion rate to: " + estimatedTaskCompletionRatePerMillis + " per ms with overrate " + overrate);
+    }
+
+    public void setNumberOfClientsInTheVirtualQueue(AtomicLong numberOfClientsInTheVirtualQueue) {
+        this.numberOfClientsInTheVirtualQueue = numberOfClientsInTheVirtualQueue;
+    }
+
+    protected HashMap<Integer, Integer> getNumberOfRequestsPerRetryInTheVirtualQueue() {
+        return numberOfRequestsPerRetryInTheVirtualQueue;
     }
 }
