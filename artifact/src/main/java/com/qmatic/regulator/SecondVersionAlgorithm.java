@@ -157,33 +157,32 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
 
     protected boolean isTopPrioritized(int numberOfRetries) {
-//        if (numberOfClientsInTheVirtualQueue.get() > 0) {
-//            Set<Integer> keySet = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
-//            int lowestRetryLevelInTheHighestPrioritizedGroup = Collections.max(keySet);
-//            int numberOfTopPrioritized = (HWM - LWM) / 4;
-//
-//            int sum = numberOfRequestsPerRetryInTheVirtualQueue.get(lowestRetryLevelInTheHighestPrioritizedGroup);
-//            while (sum < numberOfTopPrioritized && lowestRetryLevelInTheHighestPrioritizedGroup - 1 > 0) {
-//                if(numberOfRequestsPerRetryInTheVirtualQueue.containsKey(lowestRetryLevelInTheHighestPrioritizedGroup - 1)) {
-//                    int numberOfRequestsInThisRetryLevel = numberOfRequestsPerRetryInTheVirtualQueue.get(lowestRetryLevelInTheHighestPrioritizedGroup - 1);
-//                    if(numberOfRequestsInThisRetryLevel + sum < numberOfTopPrioritized) {
-//                        sum += numberOfRequestsInThisRetryLevel;
-//                        --lowestRetryLevelInTheHighestPrioritizedGroup;
-//                    } else {
-//                        if(lowestRetryLevelInTheHighestPrioritizedGroup > 1) {
-//                            --lowestRetryLevelInTheHighestPrioritizedGroup;
-//                        }
-//                        break;
-//                    }
-//                } else {
-//                    --lowestRetryLevelInTheHighestPrioritizedGroup;
-//                }
-//            }
-//            return numberOfRetries >= lowestRetryLevelInTheHighestPrioritizedGroup;
-//        } else {
-//            return false;
-//        }
-        return true;
+        Set<Integer> keySet = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
+        if(!keySet.isEmpty()) {
+            int lowestRetryLevelInTheHighestPrioritizedGroup = Collections.max(keySet);
+            int numberOfTopPrioritized = (HWM - LWM) / 4;
+
+            int sum = numberOfRequestsPerRetryInTheVirtualQueue.get(lowestRetryLevelInTheHighestPrioritizedGroup);
+            while (sum < numberOfTopPrioritized && lowestRetryLevelInTheHighestPrioritizedGroup - 1 > 0) {
+                if(numberOfRequestsPerRetryInTheVirtualQueue.containsKey(lowestRetryLevelInTheHighestPrioritizedGroup - 1)) {
+                    int numberOfRequestsInThisRetryLevel = numberOfRequestsPerRetryInTheVirtualQueue.get(lowestRetryLevelInTheHighestPrioritizedGroup - 1);
+                    if(numberOfRequestsInThisRetryLevel + sum < numberOfTopPrioritized) {
+                        sum += numberOfRequestsInThisRetryLevel;
+                        --lowestRetryLevelInTheHighestPrioritizedGroup;
+                    } else {
+                        if(lowestRetryLevelInTheHighestPrioritizedGroup > 1) {
+                            --lowestRetryLevelInTheHighestPrioritizedGroup;
+                        }
+                        break;
+                    }
+                } else {
+                    --lowestRetryLevelInTheHighestPrioritizedGroup;
+                }
+            }
+            return numberOfRetries >= lowestRetryLevelInTheHighestPrioritizedGroup;
+        } else {
+            return false;
+        }
     }
 
     protected boolean isQueueLevelLessThanFourthQuarterThreshold(long queueLevel) {
