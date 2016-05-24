@@ -126,10 +126,9 @@ public class SecondVersionAlgorithm implements Algorithm {
     }
 
     protected double computeVirtualQueueAverage() {
-
         double average = 0.0;
-        if(numberOfClientsInTheVirtualQueue.get() > 0) {
-            Set<Integer> keys = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
+        Set<Integer> keys = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
+        if(!keys.isEmpty()) {
             for(int key : keys) {
                 average += 1.0 * key * getNumberOfRequestsPerRetryInTheVirtualQueue().get(key) / numberOfClientsInTheVirtualQueue.get();
             }
