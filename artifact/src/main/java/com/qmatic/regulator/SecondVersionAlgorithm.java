@@ -98,7 +98,7 @@ public class SecondVersionAlgorithm implements Algorithm {
                 go = true;
             } else if (isQueueLevelLessThanThirdQuarterThreshold(queueLevel) && isOverAverage(numberOfRetries)) { // Prio 2
                 go = true;
-            } else if (isQueueLevelLessThanFourthQuarterthreshold(queueLevel) && isTopPrioritized(numberOfRetries)) { // Prio 1
+            } else if (isQueueLevelLessThanFourthQuarterThreshold(queueLevel) && isTopPrioritized(numberOfRetries)) { // Prio 1
                 go = true;
             }
             if(hasRetried(numberOfRetries)) {
@@ -186,7 +186,7 @@ public class SecondVersionAlgorithm implements Algorithm {
         return true;
     }
 
-    protected boolean isQueueLevelLessThanFourthQuarterthreshold(long queueLevel) {
+    protected boolean isQueueLevelLessThanFourthQuarterThreshold(long queueLevel) {
         return queueLevel < HWM;
     }
 
