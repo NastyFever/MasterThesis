@@ -206,9 +206,76 @@ public class FairnessAlgorithmTest {
 
     }
 
+    @Test
+    public void testOnLargeScale() throws  Exception{
+        int HWM = 400, LWM = 0, AM = 200;
+        double INITIAL_TCR = 8;
+        int numberOfFinishedJobs = 0;
+
+        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, true));
+        addHundredRequests(numberOfFinishedJobs, alg, true, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 1);
+        numberOfFinishedJobs = 100;
+        addHundredRequests(numberOfFinishedJobs, alg, false, 1);
+        addHundredRequests(numberOfFinishedJobs, alg, true, 2);
+    }
+
+    @Test
+    public void testOnLargeScaleOtherParameters() throws  Exception{
+        int HWM = 400, LWM = 200, AM = 300;
+        double INITIAL_TCR = 8;
+        int numberOfFinishedJobs = 0;
+
+        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, true));
+        addHundredRequests(numberOfFinishedJobs, alg, true, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, true, 0);
+        addFiftyRequests(numberOfFinishedJobs, alg, true, 0);
+        // 250
+
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addFiftyRequests(numberOfFinishedJobs, alg, true, 1);
+        addFiftyRequests(numberOfFinishedJobs, alg, true, 1);
+        addFiftyRequests(numberOfFinishedJobs, alg, true, 1);
+        // 400
+//        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+//        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 1);
+        numberOfFinishedJobs = 100;
+        addHundredRequests(numberOfFinishedJobs, alg, false, 1);
+        addFiftyRequests(numberOfFinishedJobs, alg, true, 2);
+    }
+
     private void addHundredRequests(int numberOfFinishedJobs, SecondVersionAlgorithm alg, boolean accessService, int numberOfTries) {
         addRequests(100, numberOfFinishedJobs, alg, accessService, numberOfTries);
     }
+
+    private void addFiftyRequests(int numberOfFinishedJobs, SecondVersionAlgorithm alg, boolean accessService, int numberOfTries) {
+        addRequests(50, numberOfFinishedJobs, alg, accessService, numberOfTries);
+    }
+
 
     private void addRequests(int numberOfRequests, int numberOfFinishedJobs, SecondVersionAlgorithm alg, boolean accessService, int numberOfTries) {
         JSONObject jc;
