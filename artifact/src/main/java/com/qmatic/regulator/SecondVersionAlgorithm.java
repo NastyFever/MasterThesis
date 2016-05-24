@@ -170,6 +170,9 @@ public class SecondVersionAlgorithm implements Algorithm {
                         sum += numberOfRequestsInThisRetryLevel;
                         --lowestRetryLevelInTheHighestPrioritizedGroup;
                     } else {
+                        if(lowestRetryLevelInTheHighestPrioritizedGroup > 1) {
+                            --lowestRetryLevelInTheHighestPrioritizedGroup;
+                        }
                         break;
                     }
                 } else {
