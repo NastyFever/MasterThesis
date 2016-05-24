@@ -15,6 +15,8 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class FairnessAlgorithmTest {
 
+    Logger LOGGER = LoggerFactory.getLogger(FairnessAlgorithmTest.class.getName());
+
     @Test
     public void testDecrementMapFor() throws Exception {
         int HWM = 400, LWM = 200, AM = 300;
@@ -141,5 +143,83 @@ public class FairnessAlgorithmTest {
         // Test that we don't surpass HWM
         jc = alg.runAlgorithm(numberOfFinishedJobs, 3, LOGGER);
         assertThat(jc.toJSONString().contains("ScheduleMessage"), is(true));
+    }
+
+    @Test
+    public void testIfFillsUpToHWM() throws Exception{
+        int HWM = 400, LWM = 0, AM = 200;
+        double INITIAL_TCR = 8;
+        int numberOfFinishedJobs = 0;
+
+        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, true));
+        JSONObject jc;
+
+        addHundredRequests(numberOfFinishedJobs, alg, true, 0);
+        assertThat(alg.getNumberOfReleasedTokens(), is(100L));
+
+        // Virtual queue level is 0
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        assertThat(alg.getNumberOfReleasedTokens(), is(100L));
+
+        // Virtual queue level is 100
+        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        assertThat(alg.getNumberOfReleasedTokens(), is(200L));
+
+        // Virtual queue level is 0, 200 in
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        assertThat(alg.getNumberOfReleasedTokens(), is(200L));
+
+        // Virtual queue level is 200
+        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        assertThat(alg.getNumberOfReleasedTokens(), is(300L));
+
+        // Virtual queue level is 100, 200 in
+        addHundredRequests(numberOfFinishedJobs, alg, false, 0);
+        assertThat(alg.getNumberOfReleasedTokens(), is(300L));
+
+        // Virtual queue level is 200, average is 1.5, 200 in
+        assertThat(alg.isTopPrioritized(1), is(true));
+        addHundredRequests(numberOfFinishedJobs, alg, true, 1);
+        assertThat(alg.getNumberOfReleasedTokens(), is(400L));
+    }
+
+    @Test
+    public void testCorrectPriorities() throws Exception{
+        int HWM = 4, LWM = 0, AM = 2;
+        double INITIAL_TCR = 8;
+        int numberOfFinishedJobs = 0;
+
+        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, true));
+        addRequests(1, 0, alg, true, 0);
+        addRequests(1, 0, alg, false, 0);
+        addRequests(1, 0, alg, false, 0);
+        addRequests(1, 0, alg, false, 0);
+        assertThat(alg.getNumberOfRequestsPerRetryInTheVirtualQueue().get(1), is(3));
+        addRequests(1, 0, alg, true, 1);
+        assertThat(alg.getNumberOfRequestsPerRetryInTheVirtualQueue().get(1), is(2));
+        addRequests(1, 0, alg, true, 1);
+        assertThat(alg.getNumberOfRequestsPerRetryInTheVirtualQueue().get(1), is(1));
+        assertThat(alg.getNumberOfReleasedTokens(), is(3L));
+        addRequests(1, 0, alg, true, 1);
+        assertThat(alg.getNumberOfReleasedTokens(), is(4L));
+
+    }
+
+    private void addHundredRequests(int numberOfFinishedJobs, SecondVersionAlgorithm alg, boolean accessService, int numberOfTries) {
+        addRequests(100, numberOfFinishedJobs, alg, accessService, numberOfTries);
+    }
+
+    private void addRequests(int numberOfRequests, int numberOfFinishedJobs, SecondVersionAlgorithm alg, boolean accessService, int numberOfTries) {
+        JSONObject jc;
+        for (int i = 0; i < numberOfRequests; i++) {
+            jc = alg.runAlgorithm(numberOfFinishedJobs, numberOfTries, LOGGER);
+            if(accessService) {
+                assertThat(jc.toJSONString().contains("AccessService"), is(true));
+            }
+            else {
+                assertThat(jc.toJSONString().contains("ScheduleMessage"), is(true));
+            }
+        }
     }
 }

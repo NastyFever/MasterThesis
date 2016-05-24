@@ -86,16 +86,12 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     private JSONObject passRequestThroughFairnessGate(long numberOfFinishedJobs, int numberOfRetries, Logger logger) {
         JSONObject jc = new JSONObject();
-        if(hasRetried(numberOfRetries)) {
-            numberOfClientsInTheVirtualQueue.decrementAndGet();
-        }
+
         try {
             checkThenSet.acquire(); // We have to protect the check.
             boolean go = false;
             long queueLevel = numberOfReleasedTokens - numberOfFinishedJobs;
-            decrementMapFor(numberOfRetries);
             virtualQueueAverage = computeVirtualQueueAverage();
-
             if(isQueueLevelLessThanFirstQuarterThreshold(queueLevel)) { // Free go
                 go = true;
             } else if (isQueueLevelLessThanSecondQuarterThreshold(queueLevel) && hasRetried(numberOfRetries)) { // Prio 3
@@ -105,7 +101,10 @@ public class SecondVersionAlgorithm implements Algorithm {
             } else if (isQueueLevelLessThanFourthQuarterthreshold(queueLevel) && isTopPrioritized(numberOfRetries)) { // Prio 1
                 go = true;
             }
-
+            if(hasRetried(numberOfRetries)) {
+                decrementMapFor(numberOfRetries);
+                numberOfClientsInTheVirtualQueue.decrementAndGet();
+            }
             if(go) {
                 long accessToken = ++numberOfReleasedTokens;
                 checkThenSet.release();
@@ -157,9 +156,8 @@ public class SecondVersionAlgorithm implements Algorithm {
         }
     }
 
-    private boolean isTopPrioritized(int numberOfRetries) {
+    protected boolean isTopPrioritized(int numberOfRetries) {
         if (numberOfClientsInTheVirtualQueue.get() > 0) {
-
             Set<Integer> keySet = numberOfRequestsPerRetryInTheVirtualQueue.keySet();
             int lowestRetryLevelInTheHighestPrioritizedGroup = Collections.max(keySet);
             int numberOfTopPrioritized = (HWM - LWM) / 4;
@@ -184,11 +182,11 @@ public class SecondVersionAlgorithm implements Algorithm {
         }
     }
 
-    private boolean isQueueLevelLessThanFourthQuarterthreshold(long queueLevel) {
+    protected boolean isQueueLevelLessThanFourthQuarterthreshold(long queueLevel) {
         return queueLevel < HWM;
     }
 
-    private boolean isOverAverage(int numberOfRetries) {
+    protected boolean isOverAverage(int numberOfRetries) {
         return numberOfRetries > virtualQueueAverage;
     }
 
@@ -265,5 +263,9 @@ public class SecondVersionAlgorithm implements Algorithm {
 
     protected HashMap<Integer, Integer> getNumberOfRequestsPerRetryInTheVirtualQueue() {
         return numberOfRequestsPerRetryInTheVirtualQueue;
+    }
+
+    protected double getVirtualQueueAverage() {
+        return virtualQueueAverage;
     }
 }
