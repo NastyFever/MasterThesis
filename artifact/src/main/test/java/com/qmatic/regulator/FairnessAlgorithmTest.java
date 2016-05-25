@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
@@ -43,13 +42,10 @@ public class FairnessAlgorithmTest {
         SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, true));
         HashMap<Integer, Integer> map = alg.getNumberOfRequestsPerRetryInTheVirtualQueue();
         map.put(1, 5);
-        alg.setNumberOfClientsInTheVirtualQueue(new AtomicLong(5));
         assertThat(alg.computeVirtualQueueAverage(), is(1.0));
         map.put(2, 5);
-        alg.setNumberOfClientsInTheVirtualQueue(new AtomicLong(10));
         assertThat(alg.computeVirtualQueueAverage(), is(1.5));
         map.put(3, 5);
-        alg.setNumberOfClientsInTheVirtualQueue(new AtomicLong(15));
         assertThat(alg.computeVirtualQueueAverage(), is(2.0));
     }
 
@@ -97,8 +93,6 @@ public class FairnessAlgorithmTest {
         map.put(1, 5);
         map.put(2, 5);
         map.put(3, 5);
-        alg.setNumberOfClientsInTheVirtualQueue(new AtomicLong(15));
-
 
         // Average is 2.0, active clients is 0
         // Testing Free go
@@ -113,7 +107,6 @@ public class FairnessAlgorithmTest {
         map.put(1, 5);
         map.put(2, 5);
         map.put(3, 5);
-        alg.setNumberOfClientsInTheVirtualQueue(new AtomicLong(15));
 
         jc = alg.runAlgorithm(numberOfFinishedJobs, 1, LOGGER);
         assertThat(jc.toJSONString().contains("AccessService"), is(true));
@@ -127,7 +120,6 @@ public class FairnessAlgorithmTest {
         map.put(2, 5);
         map.put(3, 2);
 
-        alg.setNumberOfClientsInTheVirtualQueue(new AtomicLong(15));
         jc = alg.runAlgorithm(numberOfFinishedJobs, 2, LOGGER);
         assertThat(jc.toJSONString().contains("AccessService"), is(true));
 
