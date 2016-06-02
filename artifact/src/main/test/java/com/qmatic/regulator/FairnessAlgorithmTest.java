@@ -50,6 +50,22 @@ public class FairnessAlgorithmTest {
     }
 
     @Test
+    public void testIsOverAverage() throws Exception {
+        int HWM = 400, LWM = 200, AM = 300;
+        double INITIAL_TCR = 8;
+        int numberOfFinishedJobs = 0;
+
+        SecondVersionAlgorithm alg = Mockito.spy(new SecondVersionAlgorithm(LWM, HWM, AM, INITIAL_TCR, true));
+        HashMap<Integer, Integer> map = alg.getNumberOfRequestsPerRetryInTheVirtualQueue();
+        alg.setNumberOfReleasedTokens(300);
+        map.put(1, 200);
+        map.put(2, 50);
+        map.put(3, 100);
+        map.put(4, 1);
+        addFiftyRequests(numberOfFinishedJobs, alg, true, 2);
+    }
+
+    @Test
     public void testIncrementMapFor() throws Exception {
         int HWM = 400, LWM = 200, AM = 300;
         double INITIAL_TCR = 8;

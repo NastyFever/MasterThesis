@@ -116,6 +116,7 @@ public class SecondVersionAlgorithm implements Algorithm {
                 checkThenSet.release();
                 jc.put("Type", "ScheduleMessage");
                 jc.put("ReturnTime", getReturntime());
+                logger.info("Client was told to comeback, has tried " + numberOfRetries + " times.");
             }
         } catch (InterruptedException e) {
             logger.info("Got interupted when checking if the regulator should release token: " + e.getMessage());
@@ -134,7 +135,7 @@ public class SecondVersionAlgorithm implements Algorithm {
                 numberOfRequestsInTheVirtualQueue += numberOfRequestsPerRetryInTheVirtualQueue.get(key);
             }
             for(int key : keys) {
-                average += 1.0 * key * getNumberOfRequestsPerRetryInTheVirtualQueue().get(key) / numberOfRequestsInTheVirtualQueue;
+                average += 1.0 * key * numberOfRequestsPerRetryInTheVirtualQueue.get(key) / numberOfRequestsInTheVirtualQueue;
             }
         }
         return average;
@@ -173,9 +174,9 @@ public class SecondVersionAlgorithm implements Algorithm {
                         sum += numberOfRequestsInThisRetryLevel;
                         --lowestRetryLevelInTheHighestPrioritizedGroup;
                     } else {
-                        if(lowestRetryLevelInTheHighestPrioritizedGroup > 1) {
-                            --lowestRetryLevelInTheHighestPrioritizedGroup;
-                        }
+//                        if(lowestRetryLevelInTheHighestPrioritizedGroup > 1) {
+//                            --lowestRetryLevelInTheHighestPrioritizedGroup;
+//                        }
                         break;
                     }
                 } else {
