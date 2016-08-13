@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
 <ipe version="70107" creator="Ipe 7.2.2">
-<info created="D:20160223100618" modified="D:20160628105003"/>
+<info created="D:20160614122757" modified="D:20160614132341"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -220,13 +220,13 @@ h
 <dashstyle name="dash dotted" value="[4 2 1 2] 0"/>
 <dashstyle name="dash dot dotted" value="[4 2 1 2 1 2] 0"/>
 <textsize name="large" value="\large"/>
-<textsize name="small" value="\small"/>
-<textsize name="tiny" value="\tiny"/>
 <textsize name="Large" value="\Large"/>
 <textsize name="LARGE" value="\LARGE"/>
 <textsize name="huge" value="\huge"/>
 <textsize name="Huge" value="\Huge"/>
+<textsize name="small" value="\small"/>
 <textsize name="footnote" value="\footnotesize"/>
+<textsize name="tiny" value="\tiny"/>
 <textstyle name="center" begin="\begin{center}" end="\end{center}"/>
 <textstyle name="itemize" begin="\begin{itemize}" end="\end{itemize}"/>
 <textstyle name="item" begin="\begin{itemize}\item{}" end="\end{itemize}"/>
@@ -254,111 +254,121 @@ h
 <page>
 <layer name="alpha"/>
 <view layers="alpha" active="alpha"/>
-<path layer="alpha" matrix="0.4 0 0 0.5 76.8 224" stroke="black">
-128 448 m
-128 320 l
-448 320 l
-448 448 l
-h
+<path layer="alpha" matrix="1 0 0 1 128 0" stroke="black">
+45.2548 0 0 45.2548 96 736 e
 </path>
-<path matrix="0.75 0 0 0.625 -48 192" stroke="black">
-192 640 m
-320 512 l
-448 640 l
-448 640 l
-h
+<path matrix="1 0 0 1 0 -128" stroke="black">
+45.2548 0 0 45.2548 96 736 e
 </path>
-<text matrix="1 0 0 1 -45.9953 32" transformations="translations" pos="192 384" stroke="black" type="label" width="94.001" height="6.926" depth="1.93" valign="baseline">\bf{Application Server}</text>
-<text matrix="1 0 0 1 16 0" transformations="translations" pos="160 560" stroke="black" type="label" width="49.592" height="6.926" depth="1.93" valign="baseline">\bf{Regulator}</text>
-<path stroke="black" fill="black">
-288 752 m
-288 704 l
-304 704 l
-304 752 l
-h
+<path matrix="1 0 0 1 128 -128" stroke="black">
+45.2548 0 0 45.2548 96 736 e
 </path>
-<path matrix="1 0 0 1 -0.09001 -78.4922" stroke="black" fill="black">
-288 752 m
-288 704 l
-304 704 l
-304 752 l
-h
+<path matrix="1 0 0 1 256 -128" stroke="black">
+45.2548 0 0 45.2548 96 736 e
 </path>
-<path stroke="black" arrow="normal/normal">
-384.367 700.375 m
-191.511 700.375 l
-191.511 593.031 l
+<path stroke="black">
+288 832 m
+288 784 l
+288 784 l
 </path>
-<path stroke="black" fill="white">
-384 736 m
-384 688 l
-432 688 l
-432 736 l
-h
+<path stroke="black">
+288 768 m
+288 720 l
 </path>
-<path stroke="black" fill="white">
-400 720 m
-400 672 l
-448 672 l
-448 720 l
-h
+<path stroke="black" cap="1">
+288 688 m
+288 688 l
 </path>
-<path stroke="black" fill="white">
-416 704 m
-416 656 l
-464 656 l
-464 704 l
-h
+<path stroke="black">
+288 704 m
+288 656 l
 </path>
-<path stroke="black" fill="white">
-432 688 m
-432 640 l
-480 640 l
-480 688 l
-h
+<path stroke="black">
+288 640 m
+288 592 l
+288 592 l
 </path>
-<text transformations="translations" pos="416 624" stroke="black" type="label" width="34.912" height="6.918" depth="0" valign="baseline">\bf{Clients}</text>
-<text matrix="1 0 0 1 16 -16" transformations="translations" pos="256 784" stroke="black" type="label" width="44.071" height="6.918" depth="0" valign="baseline">\bf{Firewall
-}</text>
-<text matrix="1 0 0 1 -6.88659 -1.22502" transformations="translations" pos="208 704" stroke="black" type="label" width="34.786" height="6.815" depth="1.93" valign="baseline">Request</text>
-<path stroke="black" arrow="normal/normal">
-207.801 593.176 m
-207.801 693.835 l
-384.357 693.835 l
+<path stroke="black">
+288 576 m
+288 528 l
 </path>
-<text matrix="1 0 0 1 -27.4524 -62.4407" transformations="translations" pos="226.103 683.608" stroke="black" type="label" width="21.032" height="6.808" depth="0" valign="baseline">Wait</text>
-<path matrix="1 0 0 1 0 -4.30625" stroke="black" arrow="normal/normal">
-383.819 711.06 m
-304.692 711.06 l
+<text matrix="1 0 0 1 7.09563 -30.8174" transformations="translations" pos="80 624" stroke="black" type="label" width="20.938" height="17.213" depth="0" valign="baseline" size="Huge">$k$     </text>
+<text matrix="1 0 0 1 135.096 -30.8174" transformations="translations" pos="80 624" stroke="black" type="label" width="20.938" height="17.213" depth="0" valign="baseline" size="Huge">$k$     </text>
+<text matrix="1 0 0 1 135.096 97.1826" transformations="translations" pos="80 624" stroke="black" type="label" width="20.938" height="17.213" depth="0" valign="baseline" size="Huge">$k$     </text>
+<text matrix="1 0 0 1 247.096 -30.8174" transformations="translations" pos="80 624" stroke="black" type="label" width="61.165" height="17.217" depth="1.57" valign="baseline" size="Huge">$k + 1$     </text>
+<path stroke="black">
+272 704 m
+320 656 l
 </path>
-<text matrix="1 0 0 1 -34.9883 -8.07423" transformations="translations" pos="346.678 717.519" stroke="black" type="label" width="75.91" height="6.926" depth="1.93" valign="baseline">Dropped Request</text>
-<path stroke="black" arrow="normal/normal">
-224.6 593.689 m
-224.6 690.58 l
-382.358 690.58 l
-383.6 690.58 l
+<path stroke="black">
+304 656 m
+320 656 l
+320 672 l
 </path>
-<text matrix="1 0 0 1 -5.38282 4.96876" transformations="translations" pos="225.014 641.306" stroke="black" type="label" width="12.799" height="6.808" depth="0" valign="baseline">Go</text>
-<text matrix="1 0 0 1 1.9254 -30.9098" transformations="translations" pos="320.663 558.494" stroke="black" type="label" width="78.65" height="6.808" depth="0" valign="baseline">Connect to Server</text>
-<path matrix="-0.00939135 -0.461289 0.488081 -0.00993681 72.902 611.534" stroke="black">
-448 480 m
-384 480 l
-384 416 l
-368 416 l
-416 384 l
-464 416 l
-448 416 l
-448 416 l
-h
+<text matrix="1 0 0 1 -256 48" transformations="translations" pos="320 768" stroke="black" type="label" width="209.149" height="17.215" depth="4.82" valign="baseline" size="Huge">Creating a fast $k+1$</text>
+<path matrix="1 0 0 1 128 -384" stroke="black">
+45.2548 0 0 45.2548 96 736 e
 </path>
-<path stroke="black" arrow="normal/normal">
-383.669 680.938 m
-271.706 680.938 l
-271.706 607.732 l
-319.075 607.732 l
-319.075 414.489 l
-304.003 414.489 l
+<path matrix="1 0 0 1 0 -512" stroke="black">
+45.2548 0 0 45.2548 96 736 e
 </path>
-<text matrix="1 0 0 1 -9.95821 -38.4871" transformations="translations" pos="277.089 451.63" stroke="black" type="label" width="27.674" height="6.815" depth="1.93" valign="baseline">Queue</text>
+<path matrix="1 0 0 1 128 -512" stroke="black">
+45.2548 0 0 45.2548 96 736 e
+</path>
+<path matrix="1 0 0 1 0 -384" stroke="black">
+288 832 m
+288 784 l
+288 784 l
+</path>
+<path matrix="1 0 0 1 0 -384" stroke="black">
+288 768 m
+288 720 l
+</path>
+<path matrix="1 0 0 1 0 -384" stroke="black" cap="1">
+288 688 m
+288 688 l
+</path>
+<path matrix="1 0 0 1 0 -384" stroke="black">
+288 704 m
+288 656 l
+</path>
+<path matrix="1 0 0 1 0 -384" stroke="black">
+288 640 m
+288 592 l
+288 592 l
+</path>
+<path matrix="1 0 0 1 0 -384" stroke="black">
+288 576 m
+288 528 l
+</path>
+<text matrix="1 0 0 1 7.09563 -414.817" transformations="translations" pos="80 624" stroke="black" type="label" width="18.851" height="15.978" depth="0" valign="baseline" size="Huge">$1$     </text>
+<text matrix="1 0 0 1 135.096 -414.817" transformations="translations" pos="80 624" stroke="black" type="label" width="20.938" height="17.213" depth="0" valign="baseline" size="Huge">$k$     </text>
+<text matrix="1 0 0 1 135.096 -286.817" transformations="translations" pos="80 624" stroke="black" type="label" width="20.938" height="17.213" depth="0" valign="baseline" size="Huge">$k$     </text>
+<text matrix="1 0 0 1 -256 -336" transformations="translations" pos="320 768" stroke="black" type="label" width="215.624" height="17.215" depth="4.82" valign="baseline" size="Huge">Creating a slow $k+1$</text>
+<path matrix="1 0 0 1 384 -384" stroke="black">
+45.2548 0 0 45.2548 96 736 e
+</path>
+<text matrix="1 0 0 1 375.096 -286.817" transformations="translations" pos="80 624" stroke="black" type="label" width="61.165" height="17.217" depth="1.57" valign="baseline" size="Huge">$k + 1$     </text>
+<path matrix="-0.842078 -0.539355 0.539355 -0.842078 427.817 776.345" stroke="black">
+256 400 m
+160 0 0 -160 352 272 448 400 a
+</path>
+<path stroke="black">
+96 160 m
+401.112 0 0 401.112 262.423 524.958 560 256 a
+</path>
+<path stroke="black">
+544 256 m
+560 256 l
+</path>
+<path stroke="black">
+560 240 m
+560 256 l
+</path>
+<path stroke="black">
+400 288 m
+432 304 l
+432 272 l
+</path>
 </page>
 </ipe>
