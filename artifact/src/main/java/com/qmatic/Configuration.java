@@ -21,6 +21,7 @@ extends Environment
 	private static final String REGULATOR_INITIAL_TCR = "regulator.initialTCR";
 	private static final String REGULATOR_TCR_LIVE_UPDATE = "regulator.TCRLiveUpdate";
 	private static final String REGULATOR_CC = "regulator.CC";
+	private static final String REGULATOR_FAIRNESS = "regulator.fairness";
 
 	private int port;
 	private String baseUrl;
@@ -33,6 +34,7 @@ extends Environment
 	private double initialTCR;
 	private boolean TCRLiveUpdate;
     private double CC;
+	private boolean fairness;
 
 	private SampleController sampleController;
     private RegulatorDebugController regulatorDebugController;
@@ -56,6 +58,7 @@ extends Environment
 		this.initialTCR = Double.parseDouble(p.getProperty(REGULATOR_INITIAL_TCR));
 		this.TCRLiveUpdate = Boolean.parseBoolean(p.getProperty(REGULATOR_TCR_LIVE_UPDATE));
         this.CC = Double.parseDouble(p.getProperty(REGULATOR_CC));
+		this.fairness = Boolean.parseBoolean(p.getProperty(REGULATOR_FAIRNESS));
     }
 
     private void initialize()
@@ -119,4 +122,8 @@ extends Environment
     public double getCC() {
         return CC;
     }
+
+	public boolean isFairness() {
+		return fairness;
+	}
 }

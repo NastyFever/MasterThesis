@@ -1,7 +1,4 @@
 Development TODOs:
 
 Other TODOs:
-- Theory behind TCP
-	* How long should our backlong be?
-	* How long can clients survive in queue? How can we affect this?
-- TCP termination? Does this affect anything on the server?
+- Request time sensitivity in intro / limitations / delimitations

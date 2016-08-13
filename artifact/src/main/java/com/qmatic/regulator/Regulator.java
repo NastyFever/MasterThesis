@@ -25,8 +25,14 @@ public class Regulator {
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
                 break;
             case "SecondVersionAlgorithm":
-                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
+                this.algorithm = new SecondVersionAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR(), configuration.isFairness());
                 LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
+                LOGGER.info("Using fairness=" + configuration.isFairness());
+                break;
+            case "VectorAlgorithm":
+                this.algorithm = new VectorAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR(), configuration.isFairness());
+                LOGGER.info("Using " + configuration.getRegulatorAlgorithm());
+                LOGGER.info("Using fairness=" + configuration.isFairness());
                 break;
             case "VectorAlgorithm":
                 this.algorithm = new VectorAlgorithm(configuration.getLowWaterMark(), configuration.getHighWaterMark(), configuration.getAimedMark(), configuration.getInitialTCR());
@@ -53,7 +59,7 @@ public class Regulator {
     private synchronized void onlineUpdateOfTaskCompletionRate(double jobTime) {
 
         sumOfJobTimes += jobTime;
-        sumOfSquaredJobTimes += jobTime*jobTime;
+        sumOfSquaredJobTimes += jobTime * jobTime;
         double averageJobTime = sumOfJobTimes / numberOfServerUpdates;
         double variance = sumOfSquaredJobTimes / numberOfServerUpdates - averageJobTime*averageJobTime;
         double standardDeviation = Math.sqrt(variance);
